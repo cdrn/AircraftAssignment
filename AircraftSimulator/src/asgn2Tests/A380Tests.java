@@ -1,19 +1,41 @@
 package asgn2Tests;
 
+import asgn2Passengers.Passenger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import asgn2Aircraft.*;
+
 
 import static org.junit.Assert.*;
 
+
 /**
- * Created by perseus on 12/05/16.
+ * All of the tests for the a380 class, which inherits from
+ * the aircraft class, testing the inherited methods as well as
+ * the class methods
  */
 public class A380Tests {
+
+    //declare the testplane globally
+    private A380 testPlane;
+
+    //global test passenger declarations
+    private asgn2Passengers.Passenger passBusiness;
+    private asgn2Passengers.Passenger passEconomy;
+    private asgn2Passengers.Passenger passPremium;
+    private asgn2Passengers.Passenger passFirst;
+
     @Before
     public void setUp() throws Exception {
+        //create the dummy test plane for the tests.
+        testPlane = new A380("new-id", 101);
 
-
+        //spin up some dummy passengers for later
+        passBusiness = new asgn2Passengers.Business(70, 101);
+        passEconomy = new asgn2Passengers.Economy(70, 101);
+        passPremium = new asgn2Passengers.Premium(70, 101);
+        passFirst = new asgn2Passengers.First(70, 101);
     }
 
     @After
@@ -21,14 +43,94 @@ public class A380Tests {
 
     }
 
+
+    //Testblock for cancel booking tests
+
     @Test
-    public void cancelBooking() throws Exception {
+    public void cancelBookingOneBusinessClass() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passPremium, 98);
+        testPlane.confirmBooking(passFirst, 98);
+        //cancel booking and assert that the flight no longer contains business class passenger
+        testPlane.cancelBooking(passBusiness, 99);
+        assertFalse(testPlane.hasPassenger(passBusiness));
+    }
+
+    @Test
+    public void cancelBookingOneEconomyClass() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passPremium, 98);
+        testPlane.confirmBooking(passFirst, 98);
+        //cancel different booking and assert no longer contains passenger
+        testPlane.cancelBooking(passEconomy, 99);
+        assertFalse(testPlane.hasPassenger(passEconomy));
 
     }
 
     @Test
-    public void confirmBooking() throws Exception {
+    public void cancelBookingOnePremiumClass() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passPremium, 98);
+        testPlane.confirmBooking(passFirst, 98);
+        //cancel different booking and assert no longer contains passenger
+        testPlane.cancelBooking(passPremium, 99);
+        assertFalse(testPlane.hasPassenger(passPremium));
 
+    }
+
+    @Test
+    public void cancelBookingOneFirstClass() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passPremium, 98);
+        testPlane.confirmBooking(passFirst, 98);
+        //cancel different booking and assert no longer contains passenger
+        testPlane.cancelBooking(passFirst, 99);
+        assertFalse(testPlane.hasPassenger(passFirst));
+
+    }
+
+
+    @Test (expected = Exception.class)
+    public void cancelBookingThrowsExceptionTooLateToCancel() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passPremium, 98);
+        testPlane.confirmBooking(passFirst, 98);
+        //assert that cancellation cannot be done after the flight
+        testPlane.cancelBooking(passFirst, 102);
+    }
+
+    @Test(expected = Exception.class)
+    public void cancelBookingPassFirstNotConfirmed() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passPremium, 98);
+        //assert that booking must be confirmed
+        testPlane.cancelBooking(passFirst, 98);
+
+    }
+
+    @Test
+    public void cancelBooking() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passPremium, 98);
+        testPlane.confirmBooking(passFirst, 98);
+
+    }
+
+
+
+    //end testblock for cancel booking tests.
+
+    @Test
+    public void confirmBookingPassBusinessAssertTrue() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        assertTrue(testPlane.hasPassenger(passBusiness));
     }
 
     @Test
@@ -62,7 +164,7 @@ public class A380Tests {
     }
 
     @Test
-    public void getNumEonomy() throws Exception {
+    public void getNumEconomy() throws Exception {
 
     }
 
