@@ -1,11 +1,9 @@
 package asgn2Tests;
 
-import asgn2Passengers.Passenger;
+import asgn2Aircraft.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import asgn2Aircraft.*;
-
 
 import static org.junit.Assert.*;
 
