@@ -46,15 +46,12 @@ public class A380Tests {
         passFirst = new asgn2Passengers.First(70, 101);
         passFirst2 = new asgn2Passengers.First(70, 101);
 
-        //confirm all the seats for the dummy passengers
+        //confirm all the seats for the dummy passengers (the first of each)
         passBusiness.confirmSeat(70, 101);
-        passBusiness2.confirmSeat(70, 101);
         passEconomy.confirmSeat(70, 101);
-        passEconomy2.confirmSeat(70, 101);
         passPremium.confirmSeat(70, 101);
-        passPremium2.confirmSeat(70, 101);
         passFirst.confirmSeat(70, 101);
-        passFirst2.confirmSeat(70, 101);
+
     }
 
     @After
@@ -273,6 +270,8 @@ public class A380Tests {
     }
 
 
+    //check a passenger from each class is marked as flown
+
     @Test
     public void flyPassengersAssertFlownEconomy() throws Exception {
         testPlane.flyPassengers(101);
@@ -300,6 +299,8 @@ public class A380Tests {
         assertTrue(passBusiness.isFlown());
 
     }
+
+    //end flypassengers
 
     //test an exception is thrown for a bad state passenger
     @Test (expected = PassengerException.class)
@@ -358,35 +359,70 @@ public class A380Tests {
         assertEquals(testPlane.getNumPremium(), 1);
     }
 
-    //getter tests end
-
     @Test
     public void getPassengers() throws Exception {
+        assertEquals(testPlane.getPassengers(), 4);
 
     }
 
+    @Test
+    public void getPassengersNull() throws Exception {
+        A380 newPlane = new A380("test-id", 101, 1, 1, 1, 1);
+        assertEquals(newPlane.getPassengers(), 0);
+
+    }
+
+
+    //fill in this string LATER PLS FINISH ME
     @Test
     public void getStatus() throws Exception {
+        assertEquals(testPlane.getStatus(101), "string that needs to be implemented")
+    }
+
+    //simple getter tests end
+
+
+    @Test
+    public void hasPassengerFromBusinessClass() throws Exception {
+        assertTrue(testPlane.hasPassenger(passBusiness));
 
     }
 
     @Test
-    public void hasPassenger() throws Exception {
+    public void hasPassengerFromPremiumClass() throws Exception {
+        assertTrue(testPlane.hasPassenger(passPremium));
+
+    }
+
+    @Test
+    public void hasPassengerFromFirstClass() throws Exception {
+        assertTrue(testPlane.hasPassenger(passFirst));
+
+    }
+
+    @Test
+    public void hasPassengerFromEconomyClass() throws Exception {
+        assertTrue(testPlane.hasPassenger(passEconomy));
 
     }
 
     @Test
     public void initialState() throws Exception {
+        assertTrue(true);
+
 
     }
 
     @Test
     public void seatsAvailable() throws Exception {
+        assertTrue(true);
+
 
     }
 
     @Test
     public void upgradeBookings() throws Exception {
+        assertTrue(true);
 
     }
 
