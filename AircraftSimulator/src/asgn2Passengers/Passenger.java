@@ -72,16 +72,24 @@ public abstract class Passenger {
 	 * OR (departureTime < bookingTime) 
 	 */
 	public Passenger(int bookingTime, int departureTime) throws PassengerException  {
-		//Stuff here 
-		this.passID = "" + Passenger.index; 
-		Passenger.index++; 
-		//Stuff here 
+		//if the selected parameters are met, throw exception
+		if((bookingTime < 0 || departureTime <= 0) || (departureTime < bookingTime)){
+			throw(PassengerException.Throwable);
+		}
+		//else construct a passenger
+		else {
+			this.passID = "" + Passenger.index;
+			Passenger.index++;
+			this.bookingTime = bookingTime;
+			this.departureTime = departureTime;
+		}
 	}
 	
 	/**
 	 * Simple no-argument constructor to support {@link #upgrade()}
 	 */
 	protected Passenger() {
+		
 
 	}
 	
