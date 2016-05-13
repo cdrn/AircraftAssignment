@@ -232,31 +232,50 @@ public class A380Tests {
 
     }
 
-    //end testblock for confirmBooking method
-
-    
+    //End confirmbooking text block
 
 
+    //MISC tests
 
+
+    //FIX THIS TEST LATER
+    //FIX TEST STRING
     @Test
     public void finalState() throws Exception {
+        assertEquals(testPlane.finalState(), "new-id Pass: 4");
 
+    }
 
+    //non empty flight
+    @Test
+    public void flightEmptyFalse() throws Exception {
+        assertFalse(testPlane.flightEmpty());
+
+    }
+
+    //empty flight
+    @Test
+    public void flightEmptyTrue() throws Exception {
+        Aircraft testCraft = new A380("testid", 50);
+        assertTrue(testCraft.flightEmpty());
     }
 
     @Test
-    public void flightEmpty() throws Exception {
-
+    public void flightFullTrue() throws Exception {
+        assertTrue(testPlane.flightFull());
     }
 
     @Test
-    public void flightFull() throws Exception {
+    public void flightFullFalse() throws Exception{
+        Aircraft testCraft = new A380("testid", 50);
+        assertFalse(testCraft.flightFull());
 
     }
+
 
     @Test
     public void flyPassengers() throws Exception {
-
+    
     }
 
     @Test
