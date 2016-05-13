@@ -1,6 +1,7 @@
 package asgn2Tests;
 
 import asgn2Aircraft.*;
+import asgn2Passengers.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,22 +19,42 @@ public class A380Tests {
     //declare the testplane globally
     private A380 testPlane;
 
-    //global test passenger declarations
+    //global test passenger declarations. 2 of each animal (for overflows)
     private asgn2Passengers.Passenger passBusiness;
+    private asgn2Passengers.Passenger passBusiness2;
     private asgn2Passengers.Passenger passEconomy;
+    private asgn2Passengers.Passenger passEconomy2;
     private asgn2Passengers.Passenger passPremium;
+    private asgn2Passengers.Passenger passPremium2;
     private asgn2Passengers.Passenger passFirst;
+    private asgn2Passengers.Passenger passFirst2;
+
 
     @Before
     public void setUp() throws Exception {
-        //create the dummy test plane for the tests.
-        testPlane = new A380("new-id", 101);
 
-        //spin up some dummy passengers for later
+        //spins up an a380 with 1 of each class to easily test boundary cases.
+        testPlane = new A380("new-id", 101, 1, 1, 1, 1);
+
+        //populate the dummy passengers before we run tests
         passBusiness = new asgn2Passengers.Business(70, 101);
+        passBusiness2 = new asgn2Passengers.Business(70, 101);
         passEconomy = new asgn2Passengers.Economy(70, 101);
+        passEconomy2 = new asgn2Passengers.Economy(70, 101);
         passPremium = new asgn2Passengers.Premium(70, 101);
+        passPremium2 = new asgn2Passengers.Premium(70, 101);
         passFirst = new asgn2Passengers.First(70, 101);
+        passFirst2 = new asgn2Passengers.First(70, 101);
+
+        //confirm all the seats for the dummy passengers
+        passBusiness.confirmSeat(70, 101);
+        passBusiness2.confirmSeat(70, 101);
+        passEconomy.confirmSeat(70, 101);
+        passEconomy2.confirmSeat(70, 101);
+        passPremium.confirmSeat(70, 101);
+        passPremium2.confirmSeat(70, 101);
+        passFirst.confirmSeat(70, 101);
+        passFirst2.confirmSeat(70, 101);
     }
 
     @After
@@ -102,28 +123,32 @@ public class A380Tests {
         testPlane.cancelBooking(passFirst, 102);
     }
 
-    @Test(expected = Exception.class)
-    public void cancelBookingPassFirstNotConfirmed() throws Exception {
+    @Test(expected = AircraftException.class)
+    public void cancelBookingPassFirstNotConfirmedOnPlane() throws Exception {
         testPlane.confirmBooking(passBusiness, 98);
         testPlane.confirmBooking(passEconomy, 98);
         testPlane.confirmBooking(passPremium, 98);
-        //assert that booking must be confirmed
+        //try to cancel unconfirmed booking
         testPlane.cancelBooking(passFirst, 98);
 
     }
 
-    @Test
-    public void cancelBooking() throws Exception {
-        testPlane.confirmBooking(passBusiness, 98);
-        testPlane.confirmBooking(passEconomy, 98);
-        testPlane.confirmBooking(passPremium, 98);
-        testPlane.confirmBooking(passFirst, 98);
+
+    //stub
+    @Test (expected = PassengerException.class)
+    public void cancelBookingPassengerNotConfirmedSeatInPassengerClass() throws Exception {
+        Passenger testPassenger = new First(70, 101);
+        testPlane.confirmBooking(testPassenger, 98);
+        testPlane.cancelBooking(testPassenger, 97);
 
     }
 
-
-
     //end testblock for cancel booking tests.
+
+
+
+    //start testblock for confirmBooking method
+
 
     @Test
     public void confirmBookingPassBusinessAssertTrue() throws Exception {
@@ -131,8 +156,91 @@ public class A380Tests {
         assertTrue(testPlane.hasPassenger(passBusiness));
     }
 
+    //tries to overbook business class to check that it throws the correct exception (aircraftexception).
+    //does this for every class to make sure the correct overbooking exception is thrown
+    @Test(expected = AircraftException.class)
+    public void confirmBookingPassBusinessThrowsExceptionAircraftNoSeats() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passBusiness2, 98);
+    }
+
+    @Test(expected = AircraftException.class)
+    public void confirmBookingPassEconomyThrowsExceptionAircraftNoSeats() throws Exception {
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passEconomy2, 98);
+    }
+
+
+    @Test(expected = AircraftException.class)
+    public void confirmBookingPassPremiumThrowsExceptionAircraftNoSeats() throws Exception {
+        testPlane.confirmBooking(passPremium, 98);
+        testPlane.confirmBooking(passPremium2, 98);
+    }
+
+
+    @Test(expected = AircraftException.class)
+    public void confirmBookingPassFirstThrowsExceptionAircraftNoSeats() throws Exception {
+        testPlane.confirmBooking(passFirst, 98);
+        testPlane.confirmBooking(passFirst2, 98);
+    }
+
+    //Tries to put a passenger from the wrong state in the booking queue
+    //by cancelling the passenger first
+    @Test(expected = PassengerException.class)
+    public void confirmBookingFirstClassWrongStateCancelled() throws Exception {
+        passFirst.cancelSeat(97);
+        testPlane.confirmBooking(passFirst, 98);
+
+    }
+    //Tries to put a passenger from the wrong state in the booking queue
+    //who has never been confirmed
+    @Test(expected = PassengerException.class)
+    public void confirmBookingFirstClassWrongStateNeverConfirmed() throws Exception {
+        Passenger unconfirmedPassenger = new asgn2Passengers.First(70, 101);
+        testPlane.confirmBooking(unconfirmedPassenger, 98);
+
+    }
+    //Tries to put in a passenger with an invalid confirmation time later than departure
+    @Test(expected = PassengerException.class)
+    public void confirmBookingLaterTimeThanDeparture() throws Exception {
+        testPlane.confirmBooking(passFirst, 102);
+
+    }
+
+    //Tries to put in a passenger just inside the confirmation boundary case (same day)
+    @Test
+    public void confirmBookingLaterTimeSameDayAsDeparture() throws Exception {
+        testPlane.confirmBooking(passFirst, 101);
+        assertTrue(passFirst.isConfirmed());
+
+    }
+
+    //Tries to put in a passenger in with a wacko departure time that doesn't match the plane
+    //just outside the upper boundary of the plane (1 more)
+    @Test(expected = PassengerException.class)
+    public void confirmBookingDepartureTimeIsTooLateOuterBoundary() throws Exception {
+        Passenger departurePassenger = new asgn2Passengers.First(70, 102);
+        testPlane.confirmBooking(departurePassenger, 100);
+
+    }
+
+    //Same as above but departure time is too early in the passenger declaration
+    @Test(expected = PassengerException.class)
+    public void confirmBookingDepartureTimeIsTooEarlyInnerBoundaryThrowException() throws Exception {
+        Passenger departurePassenger = new asgn2Passengers.First(70, 100);
+        testPlane.confirmBooking(departurePassenger, 101);
+
+    }
+
+    //end testblock for confirmBooking method
+
+    
+
+
+
     @Test
     public void finalState() throws Exception {
+
 
     }
 
