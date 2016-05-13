@@ -274,39 +274,91 @@ public class A380Tests {
 
 
     @Test
-    public void flyPassengers() throws Exception {
-    
+    public void flyPassengersAssertFlownEconomy() throws Exception {
+        testPlane.flyPassengers(101);
+        assertTrue(passEconomy.isFlown());
+
     }
 
     @Test
-    public void getBookings() throws Exception {
+    public void flyPassengersAssertFlownPremium() throws Exception {
+        testPlane.flyPassengers(101);
+        assertTrue(passPremium.isFlown());
 
     }
+
+    @Test
+    public void flyPassengersAssertFlownFirst() throws Exception {
+        testPlane.flyPassengers(101);
+        assertTrue(passFirst.isFlown());
+
+    }
+
+    @Test
+    public void flyPassengersAssertFlownBusiness() throws Exception {
+        testPlane.flyPassengers(101);
+        assertTrue(passBusiness.isFlown());
+
+    }
+
+    //test an exception is thrown for a bad state passenger
+    @Test (expected = PassengerException.class)
+    public void flyPassengersThrowPassengerExceptionBadStateEconomy() throws Exception {
+        passEconomy.cancelSeat(100);
+        testPlane.flyPassengers(101);
+        assertFalse(passEconomy.isFlown());
+
+    }
+
+    //Assert the getbookings returns the expected output when full.
+    @Test
+    public void getBookingsFullPlaneAllClasses() throws Exception {
+        Bookings dummyBooking = new Bookings(1, 1, 1, 1, 4, 0);
+        assertEquals(testPlane.getBookings(), dummyBooking);
+
+
+    }
+
+    //Assert the getbookings returns the expected output when empty
+    @Test
+    public void getBookingsEmptyPlane() throws Exception {
+
+        A380 newPlane = new A380("test-id", 101, 1, 1, 1, 1);
+        Bookings dummyBooking = new Bookings(0, 0, 0, 0, 0, 4);
+        assertEquals(newPlane.getBookings(), dummyBooking);
+    }
+
+    //Simple tests for all the getters (in case)
 
     @Test
     public void getNumBusiness() throws Exception {
+        assertEquals(testPlane.getNumBusiness(), 1);
 
     }
 
     @Test
     public void getNumEconomy() throws Exception {
+        assertEquals(testPlane.getNumEconomy(), 1);
 
     }
 
     @Test
     public void getNumFirst() throws Exception {
+        assertEquals(testPlane.getNumFirst(), 1);
 
     }
 
     @Test
     public void getNumPassengers() throws Exception {
-
+        assertEquals(testPlane.getNumPassengers(), 4);
     }
 
     @Test
     public void getNumPremium() throws Exception {
-
+        assertEquals(testPlane.getNumPremium(), 1);
     }
+
+    //getter tests end
 
     @Test
     public void getPassengers() throws Exception {
