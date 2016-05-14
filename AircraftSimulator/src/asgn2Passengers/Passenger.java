@@ -110,6 +110,24 @@ public abstract class Passenger {
 	 *         isFlown(this) OR (cancellationTime < 0) OR (departureTime < cancellationTime)
 	 */
 	public void cancelSeat(int cancellationTime) throws PassengerException {
+		if(this.isNew()||
+				this.isQueued()||
+				this.isRefused()||
+				this.isFlown()||
+				(cancellationTime <0)||
+				(this.departureTime < cancellationTime)){
+			throw(new PassengerException("Passenger in wrong state, or times incorrect. Cannot be cancelled"));
+		}
+
+		else if(this.isConfirmed()){
+			this.confirmed = false;
+			this.newState = true;
+			this.bookingTime = cancellationTime;
+
+		}
+		else{
+			throw(new PassengerException("unknown exception in cancelSeat class"));
+		}
 
 
 	}
@@ -393,7 +411,12 @@ public abstract class Passenger {
 	 * @return <code>boolean</code> true if was Confirmed state; false otherwise
 	 */
 	public boolean wasConfirmed() {
-		
+		if(this.confirmationTime > 0){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	/**
@@ -402,6 +425,12 @@ public abstract class Passenger {
 	 * @return <code>boolean</code> true if was Queued state; false otherwise
 	 */
 	public boolean wasQueued() {
+		if(this.enterQueueTime > 0){
+			return true;
+		}
+		else{
+			return false;
+		}
 		
 	}
 	
@@ -412,8 +441,11 @@ public abstract class Passenger {
 	 */
 	protected void copyPassengerState(Passenger p) {
 		
+
+
+		
 	}
-	
+
 	//Various private helper methods to check arguments and throw exceptions
 
 }
