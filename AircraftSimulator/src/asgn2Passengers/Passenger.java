@@ -82,6 +82,7 @@ public abstract class Passenger {
 			Passenger.index++;
 			this.bookingTime = bookingTime;
 			this.departureTime = departureTime;
+            this.newState = true;
 		}
 	}
 	
@@ -89,6 +90,7 @@ public abstract class Passenger {
 	 * Simple no-argument constructor to support {@link #upgrade()}
 	 */
 	protected Passenger() {
+        this.passID = "" + Passenger.index;
 
 
 	}
@@ -355,7 +357,7 @@ public abstract class Passenger {
 		if(this.isConfirmed()||
 				this.isRefused()||
 				this.isFlown()||
-				(refusalTime < 0) ||
+				(refusalTime < 0)||
 				(refusalTime<bookingTime)){
 			throw(new PassengerException("Passenger state input is wrong or refusal time or booking time of input in refusePassenger"));
 		}
@@ -440,9 +442,18 @@ public abstract class Passenger {
 	 * @param <code>Passenger</code> state to transfer
 	 */
 	protected void copyPassengerState(Passenger p) {
-		
-
-
+        //just use getters to copy all fields
+        this.confirmationTime = p.getConfirmationTime();
+        this.confirmed = p.isConfirmed();
+        this.newState = p.isNew();
+        this.inQueue = p.isQueued();
+        this.flown = p.isFlown();
+        this.refused = p.isRefused();
+        this.bookingTime = p.getBookingTime();
+        this.enterQueueTime = p.getEnterQueueTime();
+        this.exitQueueTime = p.getExitQueueTime();
+        this.departureTime = p.getDepartureTime();
+        this.passID = p.getPassID();
 		
 	}
 

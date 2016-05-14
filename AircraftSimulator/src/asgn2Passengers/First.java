@@ -20,7 +20,7 @@ public class First extends Passenger {
 	 * @see asgnPassengers.Passenger#Passenger(int,int)
 	 */
 	public First(int bookingTime, int departureTime) throws PassengerException {
-		//Call here 
+		super(bookingTime, departureTime);
 		this.passID = "F:" + this.passID;
 	}
 	
@@ -28,7 +28,6 @@ public class First extends Passenger {
 	 * Simple constructor to support {@link asgn2Passengers.Passenger#upgrade()} in other subclasses
 	 */
 	protected First() {
-
 	}
 
 	@Override
@@ -39,6 +38,7 @@ public class First extends Passenger {
 
 	@Override
 	public Passenger upgrade() {
-		//Think about it :) 
+		return null;
+
 	}
 }

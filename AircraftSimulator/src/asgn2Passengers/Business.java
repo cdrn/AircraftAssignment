@@ -20,7 +20,7 @@ public class Business extends Passenger {
 	 * @see asgnPassengers.Passenger#Passenger(int,int)
 	 */
 	public Business(int bookingTime, int departureTime) throws PassengerException {
-		//Stuff here
+		super(bookingTime, departureTime);
 		this.passID = "J:" + this.passID;
 	}
 	
@@ -28,7 +28,7 @@ public class Business extends Passenger {
 	 * Simple constructor to support {@link asgn2Passengers.Passenger#upgrade()} in other subclasses
 	 */
 	protected Business() {
-		
+
 	}
 	
 	@Override
@@ -38,6 +38,9 @@ public class Business extends Passenger {
 
 	@Override
 	public Passenger upgrade() {
-	
+		Passenger p = new Premium();
+		p.copyPassengerState(this);
+		p.passID = "P:" + this.getPassID();
+		return p;
 	}
 }
