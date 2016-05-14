@@ -74,7 +74,7 @@ public abstract class Passenger {
 	public Passenger(int bookingTime, int departureTime) throws PassengerException  {
 		//if the selected parameters are met, throw exception
 		if((bookingTime < 0 || departureTime <= 0) || (departureTime < bookingTime)){
-			throw(PassengerException.Throwable);
+			throw(new PassengerException("booking time or departure time invalid"));
 		}
 		//else construct a passenger
 		else {
