@@ -11,7 +11,7 @@ public class PremiumTests {
 
     }
 
-    //Testing github cuckboys
+    //updating .gitignore
 
 
     @org.junit.After
