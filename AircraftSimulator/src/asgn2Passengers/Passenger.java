@@ -45,6 +45,7 @@ package asgn2Passengers;
  * @author hogan
  *
  */
+
 public abstract class Passenger {
 
 	private static int index = 0;
