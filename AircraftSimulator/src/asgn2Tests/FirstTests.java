@@ -1,7 +1,6 @@
 package asgn2Tests;
 
 import asgn2Aircraft.A380;
-import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
 
 import static org.junit.Assert.*;
@@ -15,15 +14,10 @@ public class FirstTests {
     //declare the test plane globally
     private A380 testPlane;
 
-    //global test passenger declarations. 2 of each for overflow
+    //populate necessary passengers
     private asgn2Passengers.Passenger passBusiness;
-    private asgn2Passengers.Passenger passBusiness2;
-    private asgn2Passengers.Passenger passEconomy;
-    private asgn2Passengers.Passenger passEconomy2;
-    private asgn2Passengers.Passenger passPremium;
-    private asgn2Passengers.Passenger passPremium2;
     private asgn2Passengers.Passenger passFirst;
-    private asgn2Passengers.Passenger passFirst2;
+
 
 
     @Before
@@ -34,13 +28,7 @@ public class FirstTests {
 
         //populate the dummy passengers before we run tests
         passBusiness = new asgn2Passengers.Business(70, 101);
-        passBusiness2 = new asgn2Passengers.Business(70, 101);
-        passEconomy = new asgn2Passengers.Economy(70, 101);
-        passEconomy2 = new asgn2Passengers.Economy(70, 101);
-        passPremium = new asgn2Passengers.Premium(70, 101);
-        passPremium2 = new asgn2Passengers.Premium(70, 101);
         passFirst = new asgn2Passengers.First(70, 101);
-        passFirst2 = new asgn2Passengers.First(70, 101);
 
     }
 
@@ -54,7 +42,6 @@ public class FirstTests {
     @Test
     public void noSeatsMsgCheck() throws Exception {
         assertEquals(passFirst.noSeatsMsg(), "No seats available in First");
-
     }
     //end noSeats
 
@@ -228,29 +215,197 @@ public class FirstTests {
     }
     //end tests for confirmSeat
 
-    @Test
-    public void flyPassenger() throws Exception {
 
+    //start tests for flyPassenger
+    @Test (expected = PassengerException.class)
+    public void attemptFlyPassengerNew() throws Exception {
+        passBusiness.flyPassenger(101);
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptFlyPassengerRefused() throws Exception{
+        passBusiness.refusePassenger(75);
+        passBusiness.flyPassenger(101);
+    }
+
+    @Test(expected = PassengerException.class)
+    public void attemptFlyPassengerQueued() throws Exception{
+        passBusiness.queuePassenger(75, 101);
+        passBusiness.flyPassenger(101);
+    }
+
+    @Test(expected = PassengerException.class)
+    public void attemptFlyPassengerFlown() throws Exception{
+        passBusiness.confirmSeat(75, 101);
+        passBusiness.flyPassenger(101);
+        passBusiness.flyPassenger(101);
+    }
+
+    @Test(expected = PassengerException.class)
+    public void attemptFlyDepartureTimeZero() throws Exception{
+        passBusiness.confirmSeat(75, 101);
+        passBusiness.flyPassenger(0);
+    }
+
+    @Test(expected = PassengerException.class)
+    public void attemptFlyDepartureTimeNegative() throws Exception{
+        passBusiness.confirmSeat(75, 101);
+        passBusiness.flyPassenger(-1);
     }
 
     @Test
-    public void queuePassenger() throws Exception {
-
+    public void flyPassengerCheckDepartureTime() throws Exception{
+        passBusiness.confirmSeat(75, 101);
+        passBusiness.flyPassenger(100);
+        assertEquals(passBusiness.getDepartureTime(), 100);
     }
 
     @Test
-    public void refusePassenger() throws Exception {
-
+    public void flyPassengerCheckConfirmed() throws Exception{
+        passBusiness.confirmSeat(75, 101);
+        passBusiness.flyPassenger(101);
+        assertFalse(passBusiness.isConfirmed());
     }
 
     @Test
-    public void upgrade1() throws Exception {
+    public void flyPassengerCheckFlown() throws Exception{
+        passBusiness.confirmSeat(75, 101);
+        passBusiness.flyPassenger(101);
+        assertTrue(passBusiness.isFlown());
+    }
+    //end tests for flyPassenger
 
+    //start tests for queuePassenger
+    @Test (expected = PassengerException.class)
+    public void attemptQueuePassengerAlreadyQueued() throws Exception {
+        passBusiness.queuePassenger(75, 101);
+        passBusiness.queuePassenger(75, 101);
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptQueuePassengerConfirmed() throws Exception {
+        passBusiness.confirmSeat(75, 101);
+        passBusiness.queuePassenger(75, 101);
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptQueuePassengerRefused() throws Exception {
+        passBusiness.refusePassenger(75);
+        passBusiness.queuePassenger(75, 101);
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptQueuePassengerFlown() throws Exception {
+        passBusiness.flyPassenger(100);
+        passBusiness.queuePassenger(75, 101);
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptQueuePassengerQueueTimeNegative() throws Exception {
+        passBusiness.queuePassenger(-1, 101);
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptQueuePassengerQueueTimeNegative() throws Exception {
+        passBusiness.queuePassenger(-1, 101);
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptQueuePassengerDepartureTimeLessThanQueueTime() throws Exception {
+        passBusiness.queuePassenger(102, 101);
     }
 
     @Test
-    public void copyPassengerState() throws Exception {
-
+    public void queuePassengerCheckQueueTime() throws Exception{
+        passBusiness.queuePassenger(75, 101);
+        assertEquals(passBusiness.getEnterQueueTime(),75);
     }
+
+    @Test
+    public void queuePassengerCheckDepartureTime() throws Exception{
+        passBusiness.queuePassenger(75, 101);
+        assertEquals(passBusiness.getDepartureTime(), 101);
+    }
+
+    @Test
+    public void queuePassengerCheckNewState() throws Exception{
+        passBusiness.queuePassenger(75, 101);
+        assertFalse(passBusiness.isNew());
+    }
+
+    @Test
+    public void queuePassengerCheckInQueue() throws Exception{
+        passBusiness.queuePassenger(75, 101);
+        assertTrue(passBusiness.isQueued());
+    }
+    //end tests for queuePassenger
+
+    //start tests for refusePassenger
+    @Test(expected = PassengerException.class)
+    public void attemptRefusePassengerConfirmed() throws Exception{
+        passBusiness.confirmSeat(75, 101);
+        passBusiness.refusePassenger(75);
+    }
+
+    @Test(expected = PassengerException.class)
+    public void attemptRefusePassengerRefused() throws Exception{
+        passBusiness.refusePassenger(75);
+        passBusiness.refusePassenger(75);
+    }
+
+    @Test(expected = PassengerException.class)
+    public void attemptRefusePassengerFlown() throws Exception{
+        passBusiness.flyPassenger(101);
+        passBusiness.refusePassenger(75);
+    }
+
+    @Test(expected = PassengerException.class)
+    public void attemptRefuseRefusalTimeNegative() throws Exception{
+        passBusiness.refusePassenger(-1);
+    }
+
+    @Test(expected = PassengerException.class)
+    public void attemptRefusePassengerRefusalTimeLessBookingTime() throws Exception{
+        //passBusiness -> bookingTime = 70;
+        passBusiness.refusePassenger(69);
+    }
+
+    @Test
+    public void refusePassengerNewCheckExitQueueTime() throws Exception {
+        passBusiness.refusePassenger(75);
+        assertEquals(passBusiness.getExitQueueTime(), 75);
+    }
+
+    @Test
+    public void refusePassengerQueuedCheckExitQueueTime() throws Exception {
+        passBusiness.queuePassenger(70, 101);
+        passBusiness.refusePassenger(75);
+        assertEquals(passBusiness.getExitQueueTime(), 75);
+    }
+
+    @Test
+    public void refusePassengerNewCheckNewState() throws Exception {
+        passBusiness.refusePassenger(75);
+        assertFalse(passBusiness.isNew());
+    }
+
+    @Test
+    public void refusePassengerQueuedCheckQueued() throws Exception {
+        passBusiness.refusePassenger(75);
+        assertFalse(passBusiness.isQueued());
+    }
+
+    @Test
+    public void refusePassengerNewCheckRefused() throws Exception {
+        passBusiness.refusePassenger(75);
+        assertTrue(passBusiness.isRefused());
+    }
+
+    @Test
+    public void refusePassengerQueuedCheckRefused() throws Exception {
+        passBusiness.refusePassenger(75);
+        assertTrue(passBusiness.isRefused());
+    }
+    //end tests for refusePassenger
 
 }
