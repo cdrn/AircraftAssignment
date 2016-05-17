@@ -1,7 +1,10 @@
 package asgn2Tests;
 
-import asgn2Aircraft.A380;
+import asgn2Aircraft.*;
 import asgn2Passengers.PassengerException;
+import org.junit.Before;
+import org.junit.Test;
+
 
 import static org.junit.Assert.*;
 
@@ -64,7 +67,7 @@ public class FirstTests {
         passBusiness.cancelSeat(90);
     }
 
-    @Test (expected = PasssengerException.class)
+    @Test (expected = PassengerException.class)
     public void attemptCancelSeatPassengerIsRefused() throws Exception {
         passBusiness.confirmSeat(70, 101);
         passBusiness.refusePassenger(80);
@@ -298,11 +301,6 @@ public class FirstTests {
     public void attemptQueuePassengerFlown() throws Exception {
         passBusiness.flyPassenger(100);
         passBusiness.queuePassenger(75, 101);
-    }
-
-    @Test (expected = PassengerException.class)
-    public void attemptQueuePassengerQueueTimeNegative() throws Exception {
-        passBusiness.queuePassenger(-1, 101);
     }
 
     @Test (expected = PassengerException.class)

@@ -1,7 +1,8 @@
 package asgn2Tests;
 
-import asgn2Aircraft.A380;
 
+import asgn2Aircraft.*;
+import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
@@ -25,7 +26,7 @@ public class BusinessTests {
     //noSeats
     @org.junit.Test
     public void noSeatsMsgCheck() throws Exception {
-        assertEquals(passBusiness.noSeatsMsg(), "No seats available in Business")
+        assertEquals(passBusiness.noSeatsMsg(), "No seats available in Business");
     }
     //end noSeats
 

@@ -1,7 +1,9 @@
 package asgn2Tests;
 
-import asgn2Aircraft.A380;
+import asgn2Aircraft.*;
+import org.junit.Test;
 import static org.junit.Assert.*;
+
 
 /**
  * Created by Sai on 12/05/2016.

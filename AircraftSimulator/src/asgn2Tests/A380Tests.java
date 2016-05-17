@@ -376,7 +376,7 @@ public class A380Tests {
     //fill in this string LATER PLS FINISH ME
     @Test
     public void getStatus() throws Exception {
-        assertEquals(testPlane.getStatus(101), "string that needs to be implemented")
+        assertEquals(testPlane.getStatus(101), "string that needs to be implemented");
     }
 
     //simple getter tests end

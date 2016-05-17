@@ -1,6 +1,8 @@
 package asgn2Tests;
 
-import asgn2Aircraft.A380;
+import asgn2Aircraft.*;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 import static org.junit.Assert.*;
 
