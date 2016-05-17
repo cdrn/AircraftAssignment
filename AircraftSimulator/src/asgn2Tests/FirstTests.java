@@ -67,6 +67,8 @@ public class FirstTests {
     }
     //end tests for upgrade
 
+
+
     //start tests for cancelSeat
     @Test (expected = PassengerException.class)
     public void attemptCancelSeatPassengerIsQueued() throws Exception {
@@ -127,8 +129,104 @@ public class FirstTests {
     //start tests for confirmSeat
     @Test (expected = PassengerException.class)
     public void attemptConfirmSeatPassengerAlreadyConfirmed() throws Exception {
+        passBusiness.confirmSeat(70, 101);
+        passBusiness.confirmSeat(70, 101);
+    }
+
+    @Test(expected = PassengerException.class)
+    public void attemptConfirmSeatPassengerRefused() throws Exception{
+        passBusiness.refusePassenger(70);
+        passBusiness.confirmSeat(70, 101);
 
     }
+
+    @Test (expected = PassengerException.class)
+    public void attemptConfirmSeatConfirmationTimeNegative() throws Exception{
+        passBusiness.confirmSeat(-1, 101);
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptConfirmSeatDepartureLessThanConfirmation() throws Exception{
+        passBusiness.confirmSeat(102, 101);
+    }
+
+    @Test
+    public void ConfirmSeatDepartureBordersConfirmation() throws Exception{
+        passBusiness.confirmSeat(101,101);
+        assertTrue(passBusiness.isConfirmed());
+    }
+
+    @Test
+    public void ConfirmSeatConfirmationTimeZero() throws Exception{
+        passBusiness.confirmSeat(0, 101);
+        assertTrue(passBusiness.isConfirmed());
+    }
+
+    @Test
+    public void ConfirmSeatNewCheckingConfirmationTime() throws Exception{
+        passBusiness.confirmSeat(70, 101);
+        assertEquals(passBusiness.getConfirmationTime(), 70);
+    }
+
+    @Test
+    public void ConfirmSeatQueuedCheckingConfirmationTime() throws Exception{
+        passBusiness.queuePassenger(70, 101);
+        passBusiness.confirmSeat(70, 101);
+        assertEquals(passBusiness.getConfirmationTime(), 70);
+    }
+
+    @Test
+    public void ConfirmSeatNewCheckingDepartureTime() throws Exception{
+        passBusiness.confirmSeat(70, 101);
+        assertEquals(passBusiness.getDepartureTime(), 101);
+    }
+
+    @Test
+    public void ConfirmSeatQueuedCheckingDepartureTime() throws Exception{
+        passBusiness.queuePassenger(70, 101);
+        passBusiness.confirmSeat(70, 101);
+        assertEquals(passBusiness.getDepartureTime(), 70);
+    }
+
+    @Test
+    public void ConfirmSeatNewCheckNewState() throws Exception{
+        passBusiness.confirmSeat(70, 101);
+        assertFalse(passBusiness.isNew());
+    }
+
+    @Test
+    public void ConfirmSeatQueuedCheckNewState() throws Exception{
+        passBusiness.queuePassenger(70, 101);
+        passBusiness.confirmSeat(70, 101);
+        assertFalse(passBusiness.isNew());
+    }
+
+    @Test
+    public void ConfirmSeatNewCheckQueued() throws Exception{
+        passBusiness.confirmSeat(70, 101);
+        assertFalse(passBusiness.isQueued());
+    }
+
+    @Test
+    public void ConfirmSeatQueuedCheckQueued() throws Exception{
+        passBusiness.queuePassenger(70, 101);
+        passBusiness.confirmSeat(70, 101);
+        assertFalse(passBusiness.isQueued());
+    }
+
+    @Test
+    public void ConfirmSeatNewCheckConfirmed() throws Exception{
+        passBusiness.confirmSeat(70, 101);
+        assertTrue(passBusiness.isConfirmed());
+    }
+
+    @Test
+    public void ConfirmSeatQueuedCheckConfirmed() throws Exception{
+        passBusiness.queuePassenger(70, 101);
+        passBusiness.confirmSeat(70, 101);
+        assertTrue(passBusiness.isConfirmed());
+    }
+    //end tests for confirmSeat
 
     @Test
     public void flyPassenger() throws Exception {
