@@ -42,13 +42,6 @@ public class FirstTests {
         passFirst = new asgn2Passengers.First(70, 101);
         passFirst2 = new asgn2Passengers.First(70, 101);
 
-        //confirm all the seats for the dummy passengers (the first of each)
-        passBusiness.confirmSeat(70, 101);
-        passEconomy.confirmSeat(70, 101);
-        passPremium.confirmSeat(70, 101);
-        passFirst.confirmSeat(70, 101);
-
-
     }
 
 
@@ -57,52 +50,16 @@ public class FirstTests {
 
     }
 
-    //start tests for noSeats
-
+    //noSeats
     @Test
-    public void noSeatsMsg() throws Exception {
+    public void noSeatsMsgCheck() throws Exception {
+        assertEquals(passFirst.noSeatsMsg(), "No seats available in First");
 
     }
-    //end tests for noSeats
+    //end noSeats
+
 
     //start tests for Upgrade
-
-    @Test
-    public void upgradeEconomyToBusinessEconCheck() throws Exception {
-        passEconomy.upgrade();
-        assertEquals(testPlane.getNumEconomy(), 0);
-    }
-
-    @Test
-    public void upgradeEconomyToBusinessBusinessCheck() throws Exception {
-        passEconomy.upgrade();
-        assertEquals(testPlane.getNumBusiness(), 2);
-    }
-
-    @Test
-    public void upgradeBusinessToPremiumBusinessCheck() throws Exception {
-        passBusiness.upgrade();
-        assertEquals(testPlane.getNumBusiness(), 0);
-    }
-
-    @Test
-    public void upgradeBusinessToPremiumPremiumCheck()throws Exception{
-        passBusiness.upgrade();
-        assertEquals(testPlane.getNumPremium(), 2);
-    }
-
-    @Test
-    public void upgradePremiumToFirstPremiumCheck() throws Exception {
-        passPremium.upgrade();
-        assertEquals(testPlane.getNumPremium(), 0);
-    }
-
-    @Test
-    public void upgradePremiumToFirstFirstCheck() throws Exception {
-        passPremium.upgrade();
-        assertEquals(testPlane.getNumFirst(), 2);
-    }
-
     @Test
     public void attemptupgradeFirstCheckFirst() throws Exception {
         passFirst.upgrade();
@@ -113,54 +70,63 @@ public class FirstTests {
     //start tests for cancelSeat
     @Test (expected = PassengerException.class)
     public void attemptCancelSeatPassengerIsQueued() throws Exception {
+        passBusiness.confirmSeat(70, 101);
         passBusiness.queuePassenger(75, 101);
         passBusiness.cancelSeat(90);
     }
 
     @Test (expected = PasssengerException.class)
     public void attemptCancelSeatPassengerIsRefused() throws Exception {
+        passBusiness.confirmSeat(70, 101);
         passBusiness.refusePassenger(80);
         passBusiness.cancelSeat(90);
     }
 
     @Test (expected = PassengerException.class)
     public void attemptCancelSeatPassengerIsFlown() throws Exception {
+        passBusiness.confirmSeat(70, 101);
         passBusiness.flyPassenger(101);
         passBusiness.cancelSeat(90);
     }
 
     @Test (expected = PassengerException.class)
     public void attemptCancelSeatCancellationTimeNegative() throws Exception {
+        passBusiness.confirmSeat(70, 101);
         passBusiness.cancelSeat(-1);
     }
 
     @Test (expected = PassengerException.class)
     public void attemptCancelSeatDepartureTimeLessThanCancellationTime() throws Exception {
+        passBusiness.confirmSeat(70, 101);
+        passBusiness.confirmSeat(70, 101);
         passBusiness.cancelSeat(102);
     }
 
     @Test
     public void cancelSeatConfirmedIsFalse() throws Exception{
+        passBusiness.confirmSeat(70, 101);
         passBusiness.cancelSeat(90);
         assertFalse(passBusiness.isConfirmed());
     }
 
     @Test
     public void cancelSeatNewStateIsFalse() throws Exception{
+        passBusiness.confirmSeat(70, 101);
         passBusiness.cancelSeat(90);
         assertTrue(passBusiness.isNew());
     }
 
     @Test
     public void cancelSeatBookingTimeIsCancellationTime() throws Exception{
+        passBusiness.confirmSeat(70, 101);
         passBusiness.cancelSeat(90);
         assertEquals(passBusiness.getBookingTime(), 90);
     }
     //end tests for cancelSeat
 
     //start tests for confirmSeat
-    @Test
-    public void confirmSeat() throws Exception {
+    @Test (expected = PassengerException.class)
+    public void attemptConfirmSeatPassengerAlreadyConfirmed() throws Exception {
 
     }
 
