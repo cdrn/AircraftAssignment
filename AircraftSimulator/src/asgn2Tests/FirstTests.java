@@ -2,6 +2,7 @@ package asgn2Tests;
 
 import asgn2Aircraft.A380;
 import asgn2Passengers.Passenger;
+import asgn2Passengers.PassengerException;
 
 import static org.junit.Assert.*;
 
@@ -109,11 +110,55 @@ public class FirstTests {
     }
     //end tests for upgrade
 
-    @Test
-    public void cancelSeat() throws Exception {
-
+    //start tests for cancelSeat
+    @Test (expected = PassengerException.class)
+    public void attemptCancelSeatPassengerIsQueued() throws Exception {
+        passBusiness.queuePassenger(75, 101);
+        passBusiness.cancelSeat(90);
     }
 
+    @Test (expected = PasssengerException.class)
+    public void attemptCancelSeatPassengerIsRefused() throws Exception {
+        passBusiness.refusePassenger(80);
+        passBusiness.cancelSeat(90);
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptCancelSeatPassengerIsFlown() throws Exception {
+        passBusiness.flyPassenger(101);
+        passBusiness.cancelSeat(90);
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptCancelSeatCancellationTimeNegative() throws Exception {
+        passBusiness.cancelSeat(-1);
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptCancelSeatDepartureTimeLessThanCancellationTime() throws Exception {
+        passBusiness.cancelSeat(102);
+    }
+
+    @Test
+    public void cancelSeatConfirmedIsFalse() throws Exception{
+        passBusiness.cancelSeat(90);
+        assertFalse(passBusiness.isConfirmed());
+    }
+
+    @Test
+    public void cancelSeatNewStateIsFalse() throws Exception{
+        passBusiness.cancelSeat(90);
+        assertTrue(passBusiness.isNew());
+    }
+
+    @Test
+    public void cancelSeatBookingTimeIsCancellationTime() throws Exception{
+        passBusiness.cancelSeat(90);
+        assertEquals(passBusiness.getBookingTime(), 90);
+    }
+    //end tests for cancelSeat
+
+    //start tests for confirmSeat
     @Test
     public void confirmSeat() throws Exception {
 
