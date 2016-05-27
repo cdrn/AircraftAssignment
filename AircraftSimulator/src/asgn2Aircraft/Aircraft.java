@@ -120,7 +120,11 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if aircraft empty; false otherwise 
 	 */
 	public boolean flightEmpty() {
-		
+		if(numFirst	+ numBusiness +	numEconomy + numPremium == 0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	/**
@@ -129,7 +133,11 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if aircraft full; false otherwise 
 	 */
 	public boolean flightFull() {
-		
+		if(numFirst	+ numBusiness +	numEconomy + numPremium >= capacity){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	/**
@@ -152,7 +160,9 @@ public abstract class Aircraft {
 	 * @return <code>Bookings</code> object containing the status.  
 	 */
 	public Bookings getBookings() {
-		
+		int total = numFirst + numBusiness + numPremium + numEconomy;
+		Bookings thisBooking = new Bookings(numFirst, numBusiness, numPremium, numEconomy, total, capacity - total);
+		return thisBooking;
 	}
 	
 	/**

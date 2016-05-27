@@ -22,7 +22,6 @@ public class FirstTests {
     private asgn2Passengers.Passenger passFirst;
 
 
-
     @Before
     public void setUp() throws Exception {
 
