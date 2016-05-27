@@ -43,6 +43,13 @@ public class B747 extends Aircraft {
 	public B747(String flightCode,int departureTime,int first, int business, int premium, int economy) throws AircraftException {
 		//Call here 
 		this.type = "B747";
+		this.flightCode = flightCode;
+		this.departureTime = departureTime;
+		this.firstCapacity = FIRST;
+		this.businessCapacity = BUSINESS;
+		this.premiumCapacity = PREMIUM;
+		this.economyCapacity = ECONOMY;
+
 	}
 
 }

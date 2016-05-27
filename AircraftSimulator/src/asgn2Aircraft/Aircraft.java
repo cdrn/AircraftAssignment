@@ -65,7 +65,16 @@ public abstract class Aircraft {
 	 * @throws AircraftException if isNull(flightCode) OR (departureTime <=0) OR ({first,business,premium,economy} <0)
 	 */
 	public Aircraft(String flightCode,int departureTime, int first, int business, int premium, int economy) throws AircraftException {
-		//Lots here 
+		//Lots here
+
+
+		this.flightCode = flightCode;
+		this.departureTime = departureTime;
+		this.firstCapacity = first;
+		this.businessCapacity = business;
+		this.premiumCapacity = premium;
+		this.economyCapacity = economy;
+
 		this.status = "";
 	}
 	
@@ -150,7 +159,9 @@ public abstract class Aircraft {
 	 * See {@link asgn2Passengers.Passenger#flyPassenger(int)}. 
 	 */
 	public void flyPassengers(int departureTime) throws PassengerException { 
-		
+
+
+		todo
 	}
 	
 	/**
@@ -171,7 +182,7 @@ public abstract class Aircraft {
 	 * @return <code>int</code> number of Business Class passengers 
 	 */
 	public int getNumBusiness() {
-		
+		return numBusiness;
 	}
 	
 	
@@ -181,7 +192,7 @@ public abstract class Aircraft {
 	 * @return <code>int</code> number of Economy Class passengers 
 	 */
 	public int getNumEconomy() {
-		
+		return numEconomy;
 	}
 
 	/**
@@ -190,7 +201,7 @@ public abstract class Aircraft {
 	 * @return <code>int</code> number of First Class passengers 
 	 */
 	public int getNumFirst() {
-		
+		return numFirst;
 	}
 
 	/**
@@ -199,7 +210,7 @@ public abstract class Aircraft {
 	 * @return <code>int</code> number of Confirmed passengers 
 	 */
 	public int getNumPassengers() {
-		
+		return numFirst + numBusiness + numPremium + numEconomy;
 	}
 	
 	/**
@@ -208,7 +219,7 @@ public abstract class Aircraft {
 	 * @return <code>int</code> number of Premium Economy Class passengers
 	 */
 	public int getNumPremium() {
-		
+		return numPremium;
 	}
 	
 	/**
@@ -218,7 +229,8 @@ public abstract class Aircraft {
 	 * @return <code>List<Passenger></code> object containing the passengers.  
 	 */
 	public List<Passenger> getPassengers() {
-		
+		List<Passenger> seatsCopy = seats;
+		return seatsCopy;
 	}
 	
 	/**
@@ -244,7 +256,11 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if isConfirmed(p); false otherwise 
 	 */
 	public boolean hasPassenger(Passenger p) {
-		
+		if(p.isConfirmed()){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 
@@ -269,7 +285,11 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if seats in Class(p); false otherwise
 	 */
 	public boolean seatsAvailable(Passenger p) {		
-		
+//		String passengerClass= p.getClass().toString();
+//		if(passengerClass == "First"){
+//		}
+//
+		todo
 	}
 
 	/* 
