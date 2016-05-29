@@ -33,6 +33,8 @@ public class B747 extends Aircraft {
 	public B747(String flightCode,int departureTime) throws AircraftException {
 		//Call here 
 		this.type = "B747";
+		//just call the superconstructor my dude
+
 	}
 
 	/**
@@ -49,6 +51,8 @@ public class B747 extends Aircraft {
 		this.businessCapacity = BUSINESS;
 		this.premiumCapacity = PREMIUM;
 		this.economyCapacity = ECONOMY;
+		t
+		//call the superconstructor with the parameters and that's it
 
 	}
 
