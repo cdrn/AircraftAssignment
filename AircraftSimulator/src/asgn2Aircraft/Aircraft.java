@@ -67,14 +67,15 @@ public abstract class Aircraft {
 	public Aircraft(String flightCode,int departureTime, int first, int business, int premium, int economy) throws AircraftException {
 		//Lots here
 
-
+		if(isNull(flightCode) || departureTime <=0 || first < 0 || business < 0 || premium < 0 || economy < 0){
+			throw(new AircraftException("Invalid declaration of Aircraft"));
+		}
 		this.flightCode = flightCode;
 		this.departureTime = departureTime;
 		this.firstCapacity = first;
 		this.businessCapacity = business;
 		this.premiumCapacity = premium;
 		this.economyCapacity = economy;
-
 		this.status = "";
 	}
 	
