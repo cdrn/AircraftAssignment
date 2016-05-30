@@ -10,12 +10,9 @@ package asgn2Aircraft;
 import java.util.ArrayList;
 import java.util.List;
 
-import asgn2Passengers.Business;
-import asgn2Passengers.Economy;
-import asgn2Passengers.First;
+
 import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
-import asgn2Passengers.Premium;
 import asgn2Simulators.Log;
 
 /**
@@ -158,11 +155,8 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if aircraft empty; false otherwise 
 	 */
 	public boolean flightEmpty() {
-		if((numFirst + numBusiness +	numEconomy + numPremium) == 0){
-			return true;
-		}else{
-			return false;
-		}
+
+		return ((numFirst + numBusiness + numPremium + numEconomy) == 0);
 	}
 	
 	/**
@@ -171,11 +165,8 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if aircraft full; false otherwise 
 	 */
 	public boolean flightFull() {
-		if((numFirst	+ numBusiness +	numEconomy + numPremium) >= capacity){
-			return true;
-		}else{
-			return false;
-		}
+
+		return((numFirst + numBusiness + numPremium + numEconomy) >= capacity);
 	}
 	
 	/**
@@ -263,6 +254,7 @@ public abstract class Aircraft {
 		for(int i = 0; i < seats.size(); i ++){
 			seatsCopy.add(seats.get(i));
 		}
+
 		return seatsCopy;
 	}
 	
@@ -289,11 +281,7 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if isConfirmed(p); false otherwise 
 	 */
 	public boolean hasPassenger(Passenger p) {
-		if(seats.contains(p)){
-			return true;
-		}else{
-			return false;
-		}
+		return(seats.contains(p));
 	}
 	
 
@@ -320,29 +308,13 @@ public abstract class Aircraft {
 	public boolean seatsAvailable(Passenger p) {		
 		switch (p.getPassID().charAt(0)){
 			case 'F': //First class
-				if((firstCapacity - numFirst) < 0){
-					return false;
-				}else{
-					return true;
-				}
+				return((firstCapacity - numFirst) > 0);
 			case 'J': //Business class
-				if((businessCapacity - numBusiness) < 0){
-					return false;
-				}else{
-					return true;
-				}
+				return((businessCapacity - numBusiness) > 0);
 			case 'P': //Premium
-				if((premiumCapacity - numPremium) < 0){
-					return false;
-				}else{
-					return true;
-				}
+				return((premiumCapacity - numPremium) > 0);
 			case 'Y': //Economy
-				if((economyCapacity - numEconomy) < 0){
-					return false;
-				}else{
-					return true;
-				}
+				return((economyCapacity - numEconomy) > 0);
 			default:
 				//we should get here
 				return false;
