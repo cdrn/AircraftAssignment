@@ -349,15 +349,21 @@ public abstract class Aircraft {
 	 * See {@link asgn2Passengers.Passenger#upgrade()}
 	 */
 	public void upgradeBookings() throws PassengerException {
+
 		//set numbers of free seats
 		int firstFree = firstCapacity - numFirst;
 		int businessFree = businessCapacity - numBusiness;
 		int premiumFree = premiumCapacity - numPremium;
 
+		//check if Passenger is in a valid state
+
 		//upgrading business to first
 		while((firstFree > 0) && (numBusiness > 0)){
 			for(int i = 0; i < seats.size(); i ++){
 				if(seats.get(i).getPassID().charAt(0) == 'J'){
+					if(seats.get(i).isQueued() || seats.get(i).isRefused() || seats.get(i).isFlown() || seats.get(i).isNew()){
+						throw new PassengerException("Passenger attempting to be upgraded in an invalid state");
+					}
 					//upgrade passenger in seats, change counts
 					updateSeats(seats.get(i), false); //remove
 					seats.set(i, seats.get(i).upgrade());
@@ -378,6 +384,9 @@ public abstract class Aircraft {
 		while((businessFree > 0) && (numPremium > 0)){
 			for(int i = 0; i < seats.size(); i++){
 				if(seats.get(i).getPassID().charAt(0) == 'P'){
+					if(seats.get(i).isQueued() || seats.get(i).isRefused() || seats.get(i).isFlown() || seats.get(i).isNew()){
+						throw new PassengerException("Passenger attempting to be upgraded in an invalid state");
+					}
 					updateSeats(seats.get(i), false);
 					seats.set(i, seats.get(i).upgrade());
 					updateSeats(seats.get(i), true);
@@ -396,6 +405,9 @@ public abstract class Aircraft {
 		while((premiumFree > 0) && (numEconomy > 0)){
 			for(int i = 0; i < seats.size(); i++){
 				if(seats.get(i).getPassID().charAt(0) == 'Y'){
+					if(seats.get(i).isQueued() || seats.get(i).isRefused() || seats.get(i).isFlown() || seats.get(i).isNew()){
+						throw new PassengerException("Passenger attempting to be upgraded in an invalid state");
+					}
 					updateSeats(seats.get(i), false);
 					seats.set(i, seats.get(i).upgrade());
 					updateSeats(seats.get(i), true);
