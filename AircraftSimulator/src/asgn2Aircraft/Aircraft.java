@@ -158,7 +158,7 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if aircraft empty; false otherwise 
 	 */
 	public boolean flightEmpty() {
-		if(numFirst	+ numBusiness +	numEconomy + numPremium == 0){
+		if((numFirst + numBusiness +	numEconomy + numPremium) == 0){
 			return true;
 		}else{
 			return false;
@@ -171,7 +171,7 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if aircraft full; false otherwise 
 	 */
 	public boolean flightFull() {
-		if(numFirst	+ numBusiness +	numEconomy + numPremium >= capacity){
+		if((numFirst	+ numBusiness +	numEconomy + numPremium) >= capacity){
 			return true;
 		}else{
 			return false;
@@ -189,8 +189,9 @@ public abstract class Aircraft {
 	 */
 	public void flyPassengers(int departureTime) throws PassengerException { 
 
-
-		//todo
+		for(int i = 0; i < seats.size(); i++){
+			seats.get(i).flyPassenger(departureTime);
+		}
 	}
 	
 	/**
@@ -200,9 +201,8 @@ public abstract class Aircraft {
 	 * @return <code>Bookings</code> object containing the status.  
 	 */
 	public Bookings getBookings() {
-		int total = numFirst + numBusiness + numPremium + numEconomy;
-		Bookings thisBooking = new Bookings(numFirst, numBusiness, numPremium, numEconomy, total, capacity - total);
-		return thisBooking;
+		int total = getNumPassengers();
+		return new Bookings(numFirst, numBusiness, numPremium, numEconomy, total, capacity - total);
 	}
 	
 	/**
@@ -258,7 +258,11 @@ public abstract class Aircraft {
 	 * @return <code>List<Passenger></code> object containing the passengers.  
 	 */
 	public List<Passenger> getPassengers() {
-		List<Passenger> seatsCopy = seats;
+		//create a deep copy of passengers
+		List<Passenger> seatsCopy = new ArrayList<Passenger>();
+		for(int i = 0; i < seats.size(); i ++){
+			seatCopy.add(seats.get(i));
+		}
 		return seatsCopy;
 	}
 	
@@ -285,7 +289,7 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if isConfirmed(p); false otherwise 
 	 */
 	public boolean hasPassenger(Passenger p) {
-		if(p.isConfirmed()){
+		if(seats.contains(p)){
 			return true;
 		}else{
 			return false;
@@ -314,11 +318,35 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if seats in Class(p); false otherwise
 	 */
 	public boolean seatsAvailable(Passenger p) {		
-//		String passengerClass= p.getClass().toString();
-//		if(passengerClass == "First"){
-//		}
-//
-		//todo
+		switch (p.getPassID().charAt(0)){
+			case 'F': //First class
+				if((firstCapacity - numFirst) < 0){
+					return false;
+				}else{
+					return true;
+				}
+			case 'J': //Business class
+				if((businessCapacity - numBusiness) < 0){
+					return false;
+				}else{
+					return true;
+				}
+			case 'P': //Premium
+				if((premiumCapacity - numPremium) < 0){
+					return false;
+				}else{
+					return true;
+				}
+			case 'Y': //Economy
+				if((economyCapacity - numEconomy) < 0){
+					return false;
+				}else{
+					return true;
+				}
+			default:
+				//we should get here
+				return false;
+		}
 	}
 
 	/* 
