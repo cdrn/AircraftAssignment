@@ -51,7 +51,7 @@ public class B747 extends Aircraft {
 		this.businessCapacity = BUSINESS;
 		this.premiumCapacity = PREMIUM;
 		this.economyCapacity = ECONOMY;
-		t
+
 		//call the superconstructor with the parameters and that's it
 
 	}

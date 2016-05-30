@@ -65,11 +65,13 @@ public abstract class Aircraft {
 	 * @throws AircraftException if isNull(flightCode) OR (departureTime <=0) OR ({first,business,premium,economy} <0)
 	 */
 	public Aircraft(String flightCode,int departureTime, int first, int business, int premium, int economy) throws AircraftException {
-		//Lots here
-
-		if(isNull(flightCode) || departureTime <=0 || first < 0 || business < 0 || premium < 0 || economy < 0){
-			throw(new AircraftException("Invalid declaration of Aircraft"));
+		//create list of Passengers in seats
+		seats = new ArrayList<Passenger>();
+		//check for invalid input
+		if(flightCode == null|| departureTime <=0 || first < 0 || business < 0 || premium < 0 || economy < 0){
+			throw(new AircraftException("Invalid declaration: parameters out of range"));
 		}
+
 		this.flightCode = flightCode;
 		this.departureTime = departureTime;
 		this.firstCapacity = first;
@@ -77,6 +79,7 @@ public abstract class Aircraft {
 		this.premiumCapacity = premium;
 		this.economyCapacity = economy;
 		this.status = "";
+		this.capacity = this.firstCapacity + businessCapacity + premiumCapacity + economyCapacity;
 	}
 	
 	/**
@@ -90,9 +93,24 @@ public abstract class Aircraft {
 	 * @throws AircraftException if <code>Passenger</code> is not recorded in aircraft seating 
 	 */
 	public void cancelBooking(Passenger p,int cancellationTime) throws PassengerException, AircraftException {
-		//Stuff here
+		//check Passenger p is on the plane
+		if(!hasPassenger(p)){
+			throw new AircraftException("Passenger not found on Aircraft");
+		}
+		//check other parameters are valid
+		if(!p.isConfirmed()){
+			throw new AircraftException("Passenger not confirmed");
+		}
+		if(cancellationTime < 0 || cancellationTime > this.departureTime){
+			throw new AircraftException("Cancellation time invalid");
+		}
+
+		//update passenger state, list and counts
+		p.cancelSeat(cancellationTime);
+		this.updateSeats(p, false);
 		this.status += Log.setPassengerMsg(p,"C","N");
-		//Stuff here
+		this.seats.remove(p);
+
 	}
 
 	/**
@@ -106,9 +124,19 @@ public abstract class Aircraft {
 	 * @throws AircraftException if no seats available in <code>Passenger</code> fare class. 
 	 */
 	public void confirmBooking(Passenger p,int confirmationTime) throws AircraftException, PassengerException { 
-		//Stuff here
+		//Check parameters
+		if(p.isConfirmed() || p.isRefused() || p.isFlown() || confirmationTime < 0 || confirmationTime > this.departureTime){
+			throw new AircraftException("One or more parameters are invalid");
+		}
+		//Check for available seats in Passenger p's fare class
+		if(!seatsAvailable(p)){
+			throw new AircraftException(noSeatsAvailableMsg(p));
+		}
+		//update passenger state, list, and counts
+		p.confirmSeat(confirmationTime, this.departureTime);
+		this.seats.add(p);
+		this.updateSeats(p, true);
 		this.status += Log.setPassengerMsg(p,"N/Q","C");
-		//Stuff here
 	}
 	
 	/**
@@ -162,7 +190,7 @@ public abstract class Aircraft {
 	public void flyPassengers(int departureTime) throws PassengerException { 
 
 
-		todo
+		//todo
 	}
 	
 	/**
@@ -290,7 +318,7 @@ public abstract class Aircraft {
 //		if(passengerClass == "First"){
 //		}
 //
-		todo
+		//todo
 	}
 
 	/* 
@@ -348,5 +376,52 @@ public abstract class Aircraft {
 	private String noSeatsAvailableMsg(Passenger p) {
 		String msg = "";
 		return msg + p.noSeatsMsg(); 
+	}
+
+	//Helper method for changing number of seats as passengers move around
+	private void updateSeats(Passenger p, boolean add){
+		//to add a passenger to a count
+		if(add){
+			//Check the passenger's ID
+			switch (p.getPassID().charAt(0)) {
+				case 'F':
+					numFirst++;
+					break;
+				case 'J':
+					numBusiness++;
+					break;
+				case 'P':
+					numPremium++;
+					break;
+				case 'Y':
+					numEconomy++;
+					break;
+				default:
+					//Pass ID is invalid
+					break;
+			}
+		}
+		//else, to remove a passenger from a count
+		else{
+			switch (p.getPassID().charAt(0)) {
+				case 'F':
+					numFirst--;
+					break;
+				case 'J':
+					numBusiness--;
+					break;
+				case 'P':
+					numPremium--;
+					break;
+				case 'Y':
+					numEconomy--;
+					break;
+				default:
+					break;
+			}
+
+		}
+
+
 	}
 }
