@@ -376,7 +376,66 @@ public abstract class Aircraft {
 	 * @throws PassengerException if <code>Passenger</code> is in incorrect state 
 	 * See {@link asgn2Passengers.Passenger#upgrade()}
 	 */
-	public void upgradeBookings() throws PassengerException { 
+	public void upgradeBookings() throws PassengerException {
+		//set numbers of free seats
+		int firstFree = firstCapacity - numFirst;
+		int businessFree = businessCapacity - numBusiness;
+		int premiumFree = premiumCapacity - numPremium;
+
+		//upgrading business to first
+		while((firstFree > 0) && (numBusiness > 0)){
+			for(int i = 0; i < seats.size(); i ++){
+				if(seats.get(i).getPassID().charAt(0) == 'J'){
+					//upgrade passenger in seats, change counts
+					updateSeats(seats.get(i), false); //remove
+					seats.set(i, seats.get(i).upgrade());
+					updateSeats(seats.get(i), true); //add
+
+					firstFree--;
+					businessFree++;
+				}
+
+				//break early if we run out of spaces or passengers
+				if(firstFree == 0 || numBusiness == 0){
+					break;
+				}
+			}
+		}
+
+		//upgrading premium to business
+		while((businessFree > 0) && (numPremium > 0)){
+			for(int i = 0; i < seats.size(); i++){
+				if(seats.get(i).getPassID().charAt(0) == 'P'){
+					updateSeats(seats.get(i), false);
+					seats.set(i, seats.get(i).upgrade());
+					updateSeats(seats.get(i), true);
+
+					businessFree--;
+					premiumFree++;
+				}
+
+				if(businessFree == 0 || numPremium == 0){
+					break;
+				}
+			}
+		}
+
+		//upgrading economy to premium economy
+		while((premiumFree > 0) && (numEconomy > 0)){
+			for(int i = 0; i < seats.size(); i++){
+				if(seats.get(i).getPassID().charAt(0) == 'Y'){
+					updateSeats(seats.get(i), false);
+					seats.set(i, seats.get(i).upgrade());
+					updateSeats(seats.get(i), true);
+
+					premiumFree--;
+				}
+
+				if(premiumFree == 0 || numEconomy == 0){
+					break;
+				}
+			}
+		}
 		
 	}
 
