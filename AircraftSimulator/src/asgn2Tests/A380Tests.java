@@ -195,9 +195,10 @@ public class A380Tests {
     }
     //Tries to put a passenger from the wrong state in the booking queue
     //who has never been confirmed
-    @Test(expected = PassengerException.class)
+    @Test(expected = AircraftException.class)
     public void confirmBookingFirstClassWrongStateNeverConfirmed() throws Exception {
         Passenger unconfirmedPassenger = new asgn2Passengers.First(70, 101);
+        testPlane.confirmBooking(passFirst, 101);
         testPlane.confirmBooking(unconfirmedPassenger, 98);
 
     }
@@ -221,18 +222,20 @@ public class A380Tests {
     @Test(expected = PassengerException.class)
     public void confirmBookingDepartureTimeIsTooLateOuterBoundary() throws Exception {
         Passenger departurePassenger = new asgn2Passengers.First(70, 102);
-        testPlane.confirmBooking(departurePassenger, 100);
+        testPlane.confirmBooking(departurePassenger, 102);
 
     }
 
+    //TEST NO LONGER RELEVANT
+/*
     //Same as above but departure time is too early in the passenger declaration
     @Test(expected = PassengerException.class)
     public void confirmBookingDepartureTimeIsTooEarlyInnerBoundaryThrowException() throws Exception {
-        Passenger departurePassenger = new asgn2Passengers.First(70, 100);
-        testPlane.confirmBooking(departurePassenger, 101);
+        Passenger departurePassenger = new asgn2Passengers.First(70, 99);
+        testPlane.confirmBooking(departurePassenger, 100);
 
     }
-
+*/
     //End confirmbooking text block
 
 
@@ -243,13 +246,14 @@ public class A380Tests {
     //FIX TEST STRING
     @Test
     public void finalState() throws Exception {
-        assertEquals(testPlane.finalState(), "new-id Pass: 4");
+        assertEquals(testPlane.finalState(), "A380:new-id:101 Pass: 0\n\n");
 
     }
 
     //non empty flight
     @Test
     public void flightEmptyFalse() throws Exception {
+        testPlane.confirmBooking(passFirst, 92);
         assertFalse(testPlane.flightEmpty());
 
     }
@@ -263,6 +267,10 @@ public class A380Tests {
 
     @Test
     public void flightFullTrue() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passPremium, 98);
+        testPlane.confirmBooking(passFirst, 98);
         assertTrue(testPlane.flightFull());
     }
 
@@ -277,6 +285,10 @@ public class A380Tests {
 
     @Test
     public void flyPassengersAssertFlownEconomy() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passPremium, 98);
+        testPlane.confirmBooking(passFirst, 98);
         testPlane.flyPassengers(101);
         assertTrue(passEconomy.isFlown());
 
@@ -284,6 +296,10 @@ public class A380Tests {
 
     @Test
     public void flyPassengersAssertFlownPremium() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passPremium, 98);
+        testPlane.confirmBooking(passFirst, 98);
         testPlane.flyPassengers(101);
         assertTrue(passPremium.isFlown());
 
@@ -291,6 +307,10 @@ public class A380Tests {
 
     @Test
     public void flyPassengersAssertFlownFirst() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passPremium, 98);
+        testPlane.confirmBooking(passFirst, 98);
         testPlane.flyPassengers(101);
         assertTrue(passFirst.isFlown());
 
@@ -298,6 +318,10 @@ public class A380Tests {
 
     @Test
     public void flyPassengersAssertFlownBusiness() throws Exception {
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passPremium, 98);
+        testPlane.confirmBooking(passFirst, 98);
         testPlane.flyPassengers(101);
         assertTrue(passBusiness.isFlown());
 
