@@ -134,10 +134,9 @@ public class A380Tests {
 
 
     //stub
-    @Test (expected = PassengerException.class)
+    @Test (expected = AircraftException.class)
     public void cancelBookingPassengerNotConfirmedSeatInPassengerClass() throws Exception {
         Passenger testPassenger = new First(71, 101);
-        testPlane.confirmBooking(testPassenger, 98);
         testPlane.cancelBooking(testPassenger, 97);
 
     }
