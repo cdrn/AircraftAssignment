@@ -192,9 +192,10 @@ public class A380Tests {
     }
     //Tries to put a passenger from the wrong state in the booking queue
     //who has never been confirmed
-    @Test(expected = PassengerException.class)
+    @Test(expected = AircraftException.class)
     public void confirmBookingFirstClassWrongStateNeverConfirmed() throws Exception {
         Passenger unconfirmedPassenger = new asgn2Passengers.First(70, 101);
+        testPlane.confirmBooking(passFirst, 101);
         testPlane.confirmBooking(unconfirmedPassenger, 98);
 
     }
@@ -218,7 +219,7 @@ public class A380Tests {
     @Test(expected = PassengerException.class)
     public void confirmBookingDepartureTimeIsTooLateOuterBoundary() throws Exception {
         Passenger departurePassenger = new asgn2Passengers.First(70, 102);
-        testPlane.confirmBooking(departurePassenger, 100);
+        testPlane.confirmBooking(departurePassenger, 102);
 
     }
 
