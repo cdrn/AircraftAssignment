@@ -123,7 +123,7 @@ public abstract class Aircraft {
 	public void confirmBooking(Passenger p,int confirmationTime) throws AircraftException, PassengerException { 
 		//Check parameters
 		if(p.isConfirmed() || p.isRefused() || p.isFlown() || confirmationTime < 0 || confirmationTime > this.departureTime){
-			throw new AircraftException("One or more parameters are invalid");
+			throw new PassengerException("One or more parameters are invalid");
 		}
 		//Check for available seats in Passenger p's fare class
 		if(!seatsAvailable(p)){

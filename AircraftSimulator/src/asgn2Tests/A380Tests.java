@@ -47,18 +47,20 @@ public class A380Tests {
         passFirst2 = new asgn2Passengers.First(70, 101);
 
         //confirm all the seats for the dummy passengers (the first of each)
-        passBusiness.confirmSeat(70, 101);
-        passEconomy.confirmSeat(70, 101);
-        passPremium.confirmSeat(70, 101);
-        passFirst.confirmSeat(70, 101);
+        /*
+        passBusiness.confirmSeat(71, 101);
+        passEconomy.confirmSeat(71, 101);
+        passPremium.confirmSeat(71, 101);
+        passFirst.confirmSeat(71, 101);
+        */
 
     }
 
-    @After
+   /* @After
     public void tearDown() throws Exception {
 
     }
-
+*/
 
     //Testblock for cancel booking tests
 
@@ -134,7 +136,7 @@ public class A380Tests {
     //stub
     @Test (expected = PassengerException.class)
     public void cancelBookingPassengerNotConfirmedSeatInPassengerClass() throws Exception {
-        Passenger testPassenger = new First(70, 101);
+        Passenger testPassenger = new First(71, 101);
         testPlane.confirmBooking(testPassenger, 98);
         testPlane.cancelBooking(testPassenger, 97);
 
@@ -266,7 +268,6 @@ public class A380Tests {
     public void flightFullFalse() throws Exception{
         Aircraft testCraft = new A380("testid", 50);
         assertFalse(testCraft.flightFull());
-
     }
 
 
