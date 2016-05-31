@@ -31,9 +31,9 @@ public class Economy extends Passenger {
 
 	@Override
 	public Passenger upgrade() {
-		Passenger p = new Business();
+		Passenger p = new Premium();
 		p.copyPassengerState(this);
-		p.passID = "J:" + this.getPassID();
+		p.passID = "P:" + this.getPassID();
 		return p;
 	}
 }

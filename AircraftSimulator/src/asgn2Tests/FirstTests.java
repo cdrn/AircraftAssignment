@@ -31,7 +31,6 @@ public class FirstTests {
         //populate the dummy passengers before we run tests
         passBusiness = new asgn2Passengers.Business(70, 101);
         passFirst = new asgn2Passengers.First(70, 101);
-
     }
 
 
@@ -50,10 +49,12 @@ public class FirstTests {
 
     //start tests for Upgrade
     @Test
-    public void attemptupgradeFirstCheckFirst() throws Exception {
+    public void attemptUpgradeFirstCheckFirst() throws Exception {
+        testPlane.confirmBooking(passFirst, 70);
         passFirst.upgrade();
         assertEquals(testPlane.getNumFirst(), 1);
     }
+
     //end tests for upgrade
 
 
@@ -122,6 +123,7 @@ public class FirstTests {
         passBusiness.confirmSeat(70, 101);
     }
 
+
     @Test(expected = PassengerException.class)
     public void attemptConfirmSeatPassengerRefused() throws Exception{
         passBusiness.refusePassenger(70);
@@ -174,7 +176,7 @@ public class FirstTests {
     public void ConfirmSeatQueuedCheckingDepartureTime() throws Exception{
         passBusiness.queuePassenger(70, 101);
         passBusiness.confirmSeat(70, 101);
-        assertEquals(passBusiness.getDepartureTime(), 70);
+        assertEquals(passBusiness.getDepartureTime(), 101);
     }
 
     @Test

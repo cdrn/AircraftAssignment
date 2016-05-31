@@ -13,11 +13,13 @@ public class EconomyTests {
     private A380 testPlane;
 
     private asgn2Passengers.Passenger passEconomy;
+    private asgn2Passengers.Passenger passBusiness;
+
 
     @org.junit.Before
     public void setUp() throws Exception {
         //new A380 with one of each class
-        testPlane = new A380("new-id",101, 1,1,1,1);
+        testPlane = new A380("new-id",101, 2,2,2,2);
 
         //populate dummy passenger
         passEconomy = new asgn2Passengers.Economy(70,101);
@@ -37,16 +39,26 @@ public class EconomyTests {
 
 
     //start tests for upgrade
-    @Test
-    public void upgradeEconomyToBusinessEconCheck() throws Exception {
-        passEconomy.upgrade();
-        assertEquals(testPlane.getNumEconomy(), 0);
-    }
 
     @Test
-    public void upgradeEconomyToBusinessBusinessCheck() throws Exception {
-        passEconomy.upgrade();
-        assertEquals(testPlane.getNumBusiness(), 2);
+    public void upgradeEconomyToBusinessCheckID() throws Exception{
+        testPlane.confirmBooking(passEconomy, 70);
+        passBusiness = passEconomy.upgrade();
+        assertEquals('P', passBusiness.getPassID().charAt(0));
     }
+
+//    @Test
+//    public void upgradeEconomyToBusinessEconCheck() throws Exception {
+//        testPlane.confirmBooking(passEconomy, 70);
+//        passBusiness = passEconomy.upgrade();
+//        assertEquals(testPlane.getNumEconomy(), 0);
+//    }
+//
+//    @Test
+//    public void upgradeEconomyToBusinessBusinessCheck() throws Exception {
+//        testPlane.confirmBooking(passEconomy, 70);
+//        passEconomy.upgrade();
+//        assertEquals(testPlane.getNumBusiness(), 2);
+//    }
     //end tests for upgrade
 }

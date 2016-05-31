@@ -355,14 +355,13 @@ public abstract class Aircraft {
 		int businessFree = businessCapacity - numBusiness;
 		int premiumFree = premiumCapacity - numPremium;
 
-		//check if Passenger is in a valid state
 
 		//upgrading business to first
 		while((firstFree > 0) && (numBusiness > 0)){
 			for(int i = 0; i < seats.size(); i ++){
 				if(seats.get(i).getPassID().charAt(0) == 'J'){
-					if(seats.get(i).isQueued() || seats.get(i).isRefused() || seats.get(i).isFlown() || seats.get(i).isNew()){
-						throw new PassengerException("Passenger attempting to be upgraded in an invalid state");
+					if(seats.get(i).isRefused() || seats.get(i).isFlown() || seats.get(i).isNew() || seats.get(i).isQueued()){
+						throw new PassengerException("Passenger in an incorrect state");
 					}
 					//upgrade passenger in seats, change counts
 					updateSeats(seats.get(i), false); //remove
@@ -384,8 +383,8 @@ public abstract class Aircraft {
 		while((businessFree > 0) && (numPremium > 0)){
 			for(int i = 0; i < seats.size(); i++){
 				if(seats.get(i).getPassID().charAt(0) == 'P'){
-					if(seats.get(i).isQueued() || seats.get(i).isRefused() || seats.get(i).isFlown() || seats.get(i).isNew()){
-						throw new PassengerException("Passenger attempting to be upgraded in an invalid state");
+					if(seats.get(i).isRefused() || seats.get(i).isFlown() || seats.get(i).isNew() || seats.get(i).isQueued()){
+						throw new PassengerException("Passenger in an incorrect state");
 					}
 					updateSeats(seats.get(i), false);
 					seats.set(i, seats.get(i).upgrade());
@@ -405,8 +404,8 @@ public abstract class Aircraft {
 		while((premiumFree > 0) && (numEconomy > 0)){
 			for(int i = 0; i < seats.size(); i++){
 				if(seats.get(i).getPassID().charAt(0) == 'Y'){
-					if(seats.get(i).isQueued() || seats.get(i).isRefused() || seats.get(i).isFlown() || seats.get(i).isNew()){
-						throw new PassengerException("Passenger attempting to be upgraded in an invalid state");
+					if(seats.get(i).isRefused() || seats.get(i).isFlown() || seats.get(i).isNew() || seats.get(i).isQueued()){
+						throw new PassengerException("Passenger in an incorrect state");
 					}
 					updateSeats(seats.get(i), false);
 					seats.set(i, seats.get(i).upgrade());
@@ -420,7 +419,6 @@ public abstract class Aircraft {
 				}
 			}
 		}
-		
 	}
 
 	/**
