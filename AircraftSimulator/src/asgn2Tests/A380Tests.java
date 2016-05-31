@@ -18,6 +18,7 @@ public class A380Tests {
 
     //declare the testplane globally
     private A380 testPlane;
+    private A380 newPlane;
 
     //global test passenger declarations. 2 of each animal (for overflows)
     private asgn2Passengers.Passenger passBusiness;
@@ -338,8 +339,19 @@ public class A380Tests {
     //Assert the getbookings returns the expected output when full.
     @Test
     public void getBookingsFullPlaneAllClasses() throws Exception {
-        Bookings dummyBooking = new Bookings(1, 1, 1, 1, 4, 0);
-        assertEquals(testPlane.getBookings(), dummyBooking);
+        newPlane = new A380("new-id", 101, 1, 1, 1, 1);
+
+        testPlane.confirmBooking(passBusiness, 98);
+        testPlane.confirmBooking(passEconomy, 98);
+        testPlane.confirmBooking(passPremium, 98);
+        testPlane.confirmBooking(passFirst, 98);
+
+        newPlane.confirmBooking(passBusiness2, 98);
+        newPlane.confirmBooking(passEconomy2, 98);
+        newPlane.confirmBooking(passPremium2, 98);
+        newPlane.confirmBooking(passFirst2, 98);
+
+        assertSame(testPlane.getBookings().getTotal(), newPlane.getBookings().getTotal());
 
 
     }
@@ -349,8 +361,7 @@ public class A380Tests {
     public void getBookingsEmptyPlane() throws Exception {
 
         A380 newPlane = new A380("test-id", 101, 1, 1, 1, 1);
-        Bookings dummyBooking = new Bookings(0, 0, 0, 0, 0, 4);
-        assertEquals(newPlane.getBookings(), dummyBooking);
+        assertEquals(newPlane.getBookings().getTotal(), testPlane.getBookings().getTotal());
     }
 
     //Simple tests for all the getters (in case)
