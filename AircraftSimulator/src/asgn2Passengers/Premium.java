@@ -32,9 +32,9 @@ public class Premium extends Passenger {
 
     @Override
     public Passenger upgrade() {
-        Passenger p = new First();
+        Passenger p = new Business();
         p.copyPassengerState(this);
-        p.passID = "F:" + this.getPassID();
+        p.passID = "J:" + this.getPassID();
         return p;
     }
 

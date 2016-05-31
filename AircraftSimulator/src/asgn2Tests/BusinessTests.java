@@ -13,11 +13,12 @@ public class BusinessTests {
     private A380 testPlane;
 
     private asgn2Passengers.Passenger passBusiness;
+    private asgn2Passengers.Passenger passFirst;
 
     @org.junit.Before
     public void setUp() throws Exception {
         // new a380 with one of each class
-        testPlane = new A380("new-id", 101, 1, 1, 1, 1);
+        testPlane = new A380("new-id", 101, 2,2,2,2);
 
         //populate dummy passenger
         passBusiness = new asgn2Passengers.Business(70, 101);
@@ -32,15 +33,25 @@ public class BusinessTests {
 
     //start tests for upgrade
     @Test
-    public void upgradeBusinessToPremiumBusinessCheck() throws Exception {
-        passBusiness.upgrade();
-        assertEquals(testPlane.getNumBusiness(), 0);
-    }
+    public void upgradeBusinessToFirstCheckID() throws Exception{
+        testPlane.confirmBooking(passBusiness, 70);
+        passFirst = passBusiness.upgrade();
+        assertEquals('F', passFirst.getPassID().charAt(0));
 
-    @Test
-    public void upgradeBusinessToPremiumPremiumCheck()throws Exception{
-        passBusiness.upgrade();
-        assertEquals(testPlane.getNumPremium(), 2);
     }
+//    @Test
+//    public void upgradeBusinessToPremiumBusinessCheck() throws Exception {
+//        testPlane.confirmBooking(passBusiness, 70);
+//        passBusiness.upgrade();
+//        assertEquals(testPlane.getNumBusiness(), 0);
+//    }
+//
+//    @Test
+//    public void upgradeBusinessToPremiumPremiumCheck()throws Exception{
+//        testPlane.confirmBooking(passBusiness, 70);
+//        assertEquals(testPlane.getNumPremium(), 2);
+//    }
+
+
     //end tests for upgrade
 }
