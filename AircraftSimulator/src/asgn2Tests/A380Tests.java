@@ -6,6 +6,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 
@@ -333,75 +336,96 @@ public class A380Tests {
 
     @Test
     public void getNumBusiness() throws Exception {
+        testPlane.confirmBooking(passBusiness, 70);
         assertEquals(testPlane.getNumBusiness(), 1);
 
     }
 
     @Test
     public void getNumEconomy() throws Exception {
+        testPlane.confirmBooking(passEconomy, 70);
         assertEquals(testPlane.getNumEconomy(), 1);
 
     }
 
     @Test
     public void getNumFirst() throws Exception {
+        testPlane.confirmBooking(passFirst, 70);
         assertEquals(testPlane.getNumFirst(), 1);
 
     }
 
     @Test
     public void getNumPassengers() throws Exception {
+        testPlane.confirmBooking(passEconomy, 70);
+        testPlane.confirmBooking(passPremium, 70);
+        testPlane.confirmBooking(passBusiness, 70);
+        testPlane.confirmBooking(passFirst, 70);
         assertEquals(testPlane.getNumPassengers(), 4);
     }
 
     @Test
     public void getNumPremium() throws Exception {
+        testPlane.confirmBooking(passPremium, 70);
         assertEquals(testPlane.getNumPremium(), 1);
     }
 
     @Test
     public void getPassengers() throws Exception {
-        assertEquals(testPlane.getPassengers(), 4);
-
+        testPlane.confirmBooking(passBusiness, 70);
+        testPlane.confirmBooking(passEconomy, 70);
+        testPlane.confirmBooking(passPremium, 70);
+        testPlane.confirmBooking(passFirst, 70);
+        List<Passenger> dummyList = new ArrayList<>();
+        dummyList.add(0, passBusiness);
+        dummyList.add(1, passEconomy);
+        dummyList.add(2, passPremium);
+        dummyList.add(3, passFirst);
+        assertEquals(testPlane.getPassengers(), dummyList);
     }
 
     @Test
     public void getPassengersNull() throws Exception {
-        A380 newPlane = new A380("test-id", 101, 1, 1, 1, 1);
-        assertEquals(newPlane.getPassengers(), 0);
+
+        List<Passenger> dummyList = new ArrayList<>();
+        assertEquals(testPlane.getPassengers(), dummyList);
 
     }
 
 
-    //fill in this string LATER PLS FINISH ME
-    @Test
-    public void getStatus() throws Exception {
-        assertEquals(testPlane.getStatus(101), "string that needs to be implemented");
-    }
+    //TODO
+//    @Test
+//    public void getStatus() throws Exception {
+//        assertEquals(testPlane.getStatus(101), "string that needs to be implemented");
+//    }
 
     //simple getter tests end
 
 
     @Test
     public void hasPassengerFromBusinessClass() throws Exception {
+        testPlane.confirmBooking(passBusiness, 70);
         assertTrue(testPlane.hasPassenger(passBusiness));
 
     }
 
     @Test
     public void hasPassengerFromPremiumClass() throws Exception {
+        testPlane.confirmBooking(passPremium, 70);
         assertTrue(testPlane.hasPassenger(passPremium));
 
     }
 
     @Test
     public void hasPassengerFromFirstClass() throws Exception {
+        testPlane.confirmBooking(passFirst, 70);
         assertTrue(testPlane.hasPassenger(passFirst));
 
     }
 
     @Test
     public void hasPassengerFromEconomyClass() throws Exception {
+        testPlane.confirmBooking(passEconomy, 70);
         assertTrue(testPlane.hasPassenger(passEconomy));
 
     }

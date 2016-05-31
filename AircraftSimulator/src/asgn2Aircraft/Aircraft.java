@@ -250,7 +250,7 @@ public abstract class Aircraft {
 	 */
 	public List<Passenger> getPassengers() {
 		//create a deep copy of passengers
-		List<Passenger> seatsCopy = new ArrayList<Passenger>();
+		List<Passenger> seatsCopy = new ArrayList<>();
 		for(int i = 0; i < seats.size(); i ++){
 			seatsCopy.add(seats.get(i));
 		}
