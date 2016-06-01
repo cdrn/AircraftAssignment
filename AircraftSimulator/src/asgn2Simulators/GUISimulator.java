@@ -27,13 +27,31 @@ import javax.swing.border.Border;
 @SuppressWarnings("serial")
 public class GUISimulator extends JFrame implements Runnable {
     private static final long serialVersionUID = -7031008862559936404L;
-    public static final int WIDTH = 1200;
-    public static final int HEIGHT = 600;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 700;
 
 
     private JPanel pnlConsole;
 	private JPanel pnlButtons;
 	private JPanel pnlErrors;
+
+	private JButton btnRun;
+	private JButton btnShowGraph;
+
+	private JLabel lblSIMULATION;
+	private JLabel lblRandSeed;
+	private JLabel lblDailyMean;
+	private JLabel lblQueueSeed;
+	private JLabel lblCancellation;
+	private JLabel lblPASSENGERSEEDS;
+	private JLabel lblFirst;
+	private JLabel lblBusiness;
+	private JLabel lblPremium;
+	private JLabel lblEconomy;
+
+	private JLabel lblExceptionHeader;
+	private JLabel lblException;
+
 
 
 	/**
@@ -57,14 +75,15 @@ public class GUISimulator extends JFrame implements Runnable {
 		pnlConsole = createPanel(Color.WHITE);
         Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
         pnlConsole.setBorder(border);
+		createButtonPanel();
 
-
+		lblSIMULATION = new JLabel("Simulation");
+		lblRandSeed = new JLabel("Rand Seed");
 
 
 
 		this.getContentPane().add(pnlConsole,BorderLayout.NORTH);
-		pnlConsole.setPreferredSize(new Dimension(200, 200));
-
+		pnlConsole.setPreferredSize(new Dimension(800, 200));
 
 
 
@@ -94,9 +113,19 @@ public class GUISimulator extends JFrame implements Runnable {
         return jp;
     }
 
-    private JPanel gridBagPanel() {
-        JPanel jp = new JPanel(new GridBagLayout());
-		jp.setBackground(Color.BLUE);
+    private void createButtonPanel() {
+		pnlButtons = createPanel(Color.RED);
+		GridBagLayout layout = new GridBagLayout();
+		pnlButtons.setLayout(layout);
+		this.getContentPane().add(pnlButtons,BorderLayout.CENTER);
+
+		pnlButtons.setSize(new Dimension(800, 200));
+
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.anchor = GridBagConstraints.CENTER;
+
+		addToPanel(lblRandSeed, pnlButtons, constraints, 0,0, 2, 1);
 
 
 
@@ -104,8 +133,6 @@ public class GUISimulator extends JFrame implements Runnable {
         //...Create the component...
         //...Set instance variables in the GridBagConstraints instance...
         //jp.add(theComponent, c);
-
-        return jp;
     }
 
 	/* (non-Javadoc)
