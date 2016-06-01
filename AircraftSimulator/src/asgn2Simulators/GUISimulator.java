@@ -17,6 +17,7 @@ import javax.swing.*;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
+import javax.swing.border.Border;
 
 
 /**
@@ -53,13 +54,16 @@ public class GUISimulator extends JFrame implements Runnable {
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.anchor = GridBagConstraints.CENTER;
 
-		pnlConsole = createPanel(Color.RED);
+		pnlConsole = createPanel(Color.WHITE);
+        Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
+        pnlConsole.setBorder(border);
+
 
 
 
 
 		this.getContentPane().add(pnlConsole,BorderLayout.NORTH);
-		pnlConsole.setPreferredSize(new Dimension(450, 600));
+		pnlConsole.setPreferredSize(new Dimension(200, 200));
 
 
 
