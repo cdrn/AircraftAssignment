@@ -8,8 +8,6 @@ package asgn2Simulators;
 
 import asgn2Aircraft.AircraftException;
 
-import asgn2Simulators.Constants;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
@@ -393,9 +391,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     }
 
-    public void runSimulation() throws AircraftException, PassengerException, SimulationException, IOException {
+    public void runSimulation(Simulator paramSim) throws AircraftException, PassengerException, SimulationException, IOException {
 
-        sim = new Simulator();
+        sim = paramSim;
         log = new Log();
 
         this.sim.createSchedule();
@@ -440,7 +438,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         int seed = Integer.parseInt(args[0]);
         int maxQueueSize = Integer.parseInt(args[1]);
         double meanBookings = Double.parseDouble(args[2]);
-        double sdBookings = Double.parseDouble(args[3]);
+        double sdBookings = Constants.DEFAULT_DAILY_BOOKING_SD;
         double firstProb = Double.parseDouble(args[4]);
         double businessProb = Double.parseDouble(args[5]);
         double premiumProb = Double.parseDouble(args[6]);
@@ -455,6 +453,19 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.log = log;
     }
 
+    public String[] argsPopulateFromForm(){
+        String args[] = new String[9];
+        args[0] = randSeedTextField.getText();
+        args[1] = queueSeedTextField.getText();
+        args[2] = dailyMeanTextField.getText();
+        args[4] = firstTextField.getText();
+        args[5] = businessTextField.getText();
+        args[6] = premiumTextField.getText();
+        args[7] = economyTextField.getText();
+        args[8] = cancellationTextField.getText();
+
+        return args;
+    }
 
     //Event listener for GUI buttons and forms
     @Override
@@ -464,8 +475,15 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         //action listener, if the button is enabled, do thing.
 
         if (btnRun.getModel().isArmed()) {
+            //clear the console window
+            outputLabel.setText("");
+            //Grab the user provided arguments
+            String args[] = argsPopulateFromForm();
+
+
+            //try to run the simulation and print with the argument params
             try {
-                runSimulation();
+                runSimulation(createSimulatorUsingArgs(args));
             } catch (AircraftException e1) {
                 e1.printStackTrace();
             } catch (PassengerException e1) {
@@ -475,7 +493,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            //outputLabel.append(String.valueOf(sim.getDailyBookings()));
         }
 
         if (btnShowGraph.getModel().isArmed()) {
