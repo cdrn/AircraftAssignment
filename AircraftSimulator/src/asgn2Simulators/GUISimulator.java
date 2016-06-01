@@ -418,11 +418,13 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             //Log progress
             this.log.logQREntries(time, sim);
             this.log.logEntry(time, this.sim);
-            outputLabel.append(sim + "\n");
+            boolean flying = (time >= Constants.FIRST_FLIGHT);
+            outputLabel.append(sim.getSummary(time, flying));
         }
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.log.logQREntries(Constants.DURATION, sim);
         this.log.finalise(this.sim);
+        outputLabel.append(sim.finalState());
 
     }
 
