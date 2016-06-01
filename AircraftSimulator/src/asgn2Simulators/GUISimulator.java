@@ -29,11 +29,11 @@ public class GUISimulator extends JFrame implements Runnable {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 700;
 
-
     private JPanel pnlConsole;
 	private JPanel pnlErrors;
     private JPanel pnlPassengerSeeds;
     private JPanel pnlSimulation;
+    private JPanel pnlButtons;
 
 	private JButton btnRun;
 	private JButton btnShowGraph;
@@ -47,6 +47,7 @@ public class GUISimulator extends JFrame implements Runnable {
     private JTextField queueSeedTextField;
 	private JLabel lblCancellation;
     private JTextField cancellationTextField;
+
 	private JLabel lblPASSENGERSEEDS;
 	private JLabel lblFirst;
     private JTextField firstTextField;
@@ -80,11 +81,13 @@ public class GUISimulator extends JFrame implements Runnable {
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.anchor = GridBagConstraints.CENTER;
 
-		pnlConsole = createPanel(Color.WHITE);
+		pnlConsole = createPanel(Color.pink);
         Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
         pnlConsole.setBorder(border);
 		createSimulationPanel();
         createPassengerSeedsPanel();
+        createButtonPanel();
+        createExceptionPanel();
 
 		this.getContentPane().add(pnlConsole,BorderLayout.NORTH);
 		pnlConsole.setPreferredSize(new Dimension(800, 300));
@@ -109,6 +112,37 @@ public class GUISimulator extends JFrame implements Runnable {
         JPanel jp = new JPanel();
         jp.setBackground(c);
         return jp;
+    }
+
+    private void createExceptionPanel(){
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        pnlErrors = createPanel(Color.CYAN);
+        GridBagLayout layout = new GridBagLayout();
+        pnlErrors.setLayout(layout);
+        this.getContentPane().add(pnlErrors, BorderLayout.SOUTH);
+        pnlErrors.setPreferredSize(new Dimension(250, 100));
+
+    }
+
+    private void createButtonPanel(){
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        pnlButtons = createPanel(Color.GREEN);
+        GridBagLayout layout = new GridBagLayout();
+        pnlButtons.setLayout(layout);
+        this.getContentPane().add(pnlButtons, BorderLayout.EAST);
+        pnlButtons.setPreferredSize(new Dimension(250, 100));
+
+        btnRun = new JButton("Run");
+        btnShowGraph = new JButton("show the graph");
+
+        addToPanel(btnRun, pnlButtons, constraints);
+        addToPanel(btnShowGraph, pnlButtons, constraints);
+
+
+
+
     }
 
     private void createPassengerSeedsPanel(){
