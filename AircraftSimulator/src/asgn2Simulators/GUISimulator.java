@@ -59,7 +59,7 @@ public class GUISimulator extends JFrame implements Runnable {
 
 
 		this.getContentPane().add(pnlGridWrapper,BorderLayout.CENTER);
-		addToPanel(lblConsole, pnlGridWrapper, constraints, 0,0,600, 450);
+		addToPanel(lblConsole, pnlGridWrapper, constraints, 1,1,600, 450);
 
 
 
@@ -79,8 +79,8 @@ public class GUISimulator extends JFrame implements Runnable {
 
     private JLabel createOutputConsole(){
         JLabel oc = new JLabel();
-        oc.setBackground(Color.BLUE);
-        oc.setPreferredSize(new Dimension(600, 450));
+        oc.setBackground(Color.RED);
+        //oc.setPreferredSize(new Dimension(600, 450));
         return oc;
     }
 
@@ -92,6 +92,7 @@ public class GUISimulator extends JFrame implements Runnable {
 
     private JPanel gridBagPanel() {
         JPanel jp = new JPanel(new GridBagLayout());
+		jp.setBackground(Color.BLUE);
 
 
 
