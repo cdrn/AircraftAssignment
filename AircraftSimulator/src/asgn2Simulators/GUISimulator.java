@@ -6,8 +6,8 @@
  */
 package asgn2Simulators;
 
+import asgn2Passengers.PassengerException;
 import asgn2Aircraft.AircraftException;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
@@ -16,13 +16,10 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-
-
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.border.Border;
 
-import asgn2Passengers.PassengerException;
 
 
 /**
@@ -40,7 +37,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JPanel pnlPassengerSeeds;
     private JPanel pnlSimulation;
     private JPanel pnlButtons;
-
 
     private JTextArea outputLabel;
 
@@ -113,9 +109,13 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     }
 
+    /*
+        Simple method to add something to a panel
+    */
     private void addToPanel(Component component, JPanel jp, GridBagConstraints constr) {
         jp.add(component, constr);
     }
+
 
     private JLabel createOutputConsole() {
         JLabel oc = new JLabel();
@@ -129,6 +129,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         jp.setBackground(c);
         return jp;
     }
+
 
     //populate the default values by parsing to string from constants file
     private void setDefaultValues(){
@@ -149,16 +150,20 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
 
     private void createOutputPanel(){
+
+        //TODO
         outputLabel = new JTextArea();
+        outputLabel.setBounds(18, 21, 400, 200);
         //try to add a scrollbar??
-        JScrollPane scroll = new JScrollPane (outputLabel);
-        scroll.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
-        pnlConsole.add(scroll);
+        JScrollPane sp = new JScrollPane(outputLabel);
+        sp.setBounds(18, 21, 400, 200);
+        pnlConsole.add(sp);
         //
         GridBagLayout layout = new GridBagLayout();
         outputLabel.setLayout(layout);
         pnlConsole.add(outputLabel, BorderLayout.CENTER);
-        pnlConsole.setPreferredSize(new Dimension(250, 100));
+        pnlConsole.setSize(800, 300);
+
     }
 
     private void createExceptionPanel() {
@@ -189,7 +194,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
 
         //adds the buttons to the button panel
+        constraints.ipady =3;
         addToPanel(btnRun, pnlButtons, constraints);
+        constraints.gridy=2;
         addToPanel(btnShowGraph, pnlButtons, constraints);
 
         //Adds both buttons to the event listener in this class
@@ -206,14 +213,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lblFirst = new JLabel("First");
         firstTextField = new JTextField(5);
 
-        lblEconomy = new JLabel("Business");
-        economyTextField = new JTextField(5);
-
-        lblBusiness = new JLabel("Queue Seed");
+        lblBusiness = new JLabel("Business");
         businessTextField = new JTextField(5);
 
-        lblPremium = new JLabel("Cancellation");
+        lblPremium = new JLabel("Premium");
         premiumTextField = new JTextField(5);
+
+        lblEconomy = new JLabel("Economy");
+        economyTextField = new JTextField(5);
 
         pnlPassengerSeeds = createPanel(Color.BLUE);
         GridBagLayout layout = new GridBagLayout();
@@ -223,7 +230,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlPassengerSeeds.setPreferredSize(new Dimension(250, 100));
 
 
-        //Set the button and label for randseed
+        //Set the field and label for randseed
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.ipady = 1;      //make this component tall
@@ -240,7 +247,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         constraints.anchor = GridBagConstraints.CENTER;
         addToPanel(firstTextField, pnlPassengerSeeds, constraints);
 
-        //setup button and label for dailyMean
+        //setup field and label for dailyMean
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.ipady = 1;      //make this component tall
@@ -470,7 +477,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     //Event listener for GUI buttons and forms
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
 
         //action listener, if the button is enabled, do thing.
 
