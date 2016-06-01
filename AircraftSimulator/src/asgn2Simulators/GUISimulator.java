@@ -30,8 +30,9 @@ public class GUISimulator extends JFrame implements Runnable {
     public static final int HEIGHT = 600;
 
 
-    private JPanel pnlGridWrapper;
-	private JLabel lblConsole;
+    private JPanel pnlConsole;
+	private JPanel pnlButtons;
+	private JPanel pnlErrors;
 
 
 	/**
@@ -55,7 +56,8 @@ public class GUISimulator extends JFrame implements Runnable {
 
 
 		pnlGridWrapper = gridBagPanel();
-		lblConsole = createOutputConsole();
+		pnlConsole = createPanel(Color.WHITE);
+
 
 
 		this.getContentPane().add(pnlGridWrapper,BorderLayout.CENTER);
