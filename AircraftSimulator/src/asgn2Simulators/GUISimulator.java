@@ -53,15 +53,13 @@ public class GUISimulator extends JFrame implements Runnable {
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.anchor = GridBagConstraints.CENTER;
 
-
-
-		pnlGridWrapper = gridBagPanel();
-		pnlConsole = createPanel(Color.WHITE);
+		pnlConsole = createPanel(Color.RED);
 
 
 
-		this.getContentPane().add(pnlGridWrapper,BorderLayout.CENTER);
-		addToPanel(lblConsole, pnlGridWrapper, constraints, 1,1,600, 450);
+
+		this.getContentPane().add(pnlConsole,BorderLayout.NORTH);
+		pnlConsole.setPreferredSize(new Dimension(450, 600));
 
 
 
