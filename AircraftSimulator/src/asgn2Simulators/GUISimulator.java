@@ -89,7 +89,6 @@ public class GUISimulator extends JFrame implements Runnable {
 
         repaint();
         this.setVisible(true);
-
 	}
 
 	private void addToPanel(Component component, JPanel jp, GridBagConstraints constr, int x, int y, int width, int height) {
@@ -126,6 +125,7 @@ public class GUISimulator extends JFrame implements Runnable {
 		constraints.anchor = GridBagConstraints.CENTER;
 
 		addToPanel(lblRandSeed, pnlButtons, constraints, 0,0, 2, 1);
+
 
 
 

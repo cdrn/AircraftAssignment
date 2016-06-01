@@ -50,13 +50,6 @@ public class A380Tests {
         passFirst = new asgn2Passengers.First(70, 101);
         passFirst2 = new asgn2Passengers.First(70, 101);
 
-        //confirm all the seats for the dummy passengers (the first of each)
-        /*
-        passBusiness.confirmSeat(71, 101);
-        passEconomy.confirmSeat(71, 101);
-        passPremium.confirmSeat(71, 101);
-        passFirst.confirmSeat(71, 101);
-        */
 
     }
 
@@ -427,14 +420,9 @@ public class A380Tests {
 
     }
 
-
-    //TODO
-//    @Test
-//    public void getStatus() throws Exception {
-//        assertEquals(testPlane.getStatus(101), "string that needs to be implemented");
-//    }
-
     //simple getter tests end
+
+
 
 
     @Test
@@ -479,10 +467,90 @@ public class A380Tests {
 
     }
 
-    @Test
-    public void upgradeBookings() throws Exception {
-        assertTrue(true);
-
+    //upgradeBookings tests
+    @Test (expected = PassengerException.class)
+    public void attemptUpgradeBookingsBusinessFlown() throws Exception {
+        passBusiness.flyPassenger(101);
+        testPlane.upgradeBookings();
     }
+
+    @Test (expected = PassengerException.class)
+    public void attemptUpgradeBookingsBusinessRefused() throws Exception{
+        passBusiness.refusePassenger(75);
+        testPlane.upgradeBookings();
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptUpgradeBookingsBusinessQueued() throws Exception{
+        passBusiness.queuePassenger(71, 101);
+        testPlane.upgradeBookings();
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptUpgradeBookingsPremiumFlown() throws Exception{
+        passPremium.flyPassenger(101);
+        testPlane.upgradeBookings();
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptUpgradeBookingsPremiumRefused() throws Exception{
+        passPremium.refusePassenger(71);
+        testPlane.upgradeBookings();
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptUpgradeBookingsPremiumQueued() throws Exception{
+        passPremium.queuePassenger(71, 101);
+        testPlane.upgradeBookings();
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptUpgradeBookingsEconomyFlown() throws Exception{
+        passEconomy.flyPassenger(101);
+        testPlane.upgradeBookings();
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptUpgradeBookingsEconomyRefused() throws Exception{
+        passEconomy.refusePassenger(71);
+        testPlane.upgradeBookings();
+    }
+
+    @Test (expected = PassengerException.class)
+    public void attemptUpgradeBookingsEconomyQueued() throws Exception{
+        passEconomy.queuePassenger(71, 101);
+        testPlane.upgradeBookings();
+    }
+
+
+
+
+    @Test
+    public void upgradeBookingsCheckFirst() throws Exception {
+        passBusiness.confirmSeat(71, 101);
+        testPlane.upgradeBookings();
+        assertEquals(testPlane.getNumFirst(), 1);
+    }
+
+    @Test
+    public void upgradeBookingsCheckBusiness() throws Exception{
+        passPremium.confirmSeat(71, 101);
+        testPlane.upgradeBookings();
+        assertEquals(testPlane.getNumPremium(), 1);
+    }
+
+    @Test
+    public void upgradeBookingsCheckPremium() throws Exception{
+        passEconomy.confirmSeat(71, 101);
+        testPlane.upgradeBookings();
+        assertEquals(testPlane.getNumPremium(), 1);
+    }
+
+
+
+
+
+
+    //end upgradeBookings tests
 
 }
