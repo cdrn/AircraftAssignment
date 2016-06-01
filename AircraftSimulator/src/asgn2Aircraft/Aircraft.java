@@ -134,6 +134,7 @@ public abstract class Aircraft {
 		this.seats.add(p);
 		this.updateSeats(p, true);
 		this.status += Log.setPassengerMsg(p,"N/Q","C");
+
 	}
 	
 	/**
@@ -367,6 +368,7 @@ public abstract class Aircraft {
 					updateSeats(seats.get(i), false); //remove
 					seats.set(i, seats.get(i).upgrade());
 					updateSeats(seats.get(i), true); //add
+
 
 					firstFree--;
 					businessFree++;

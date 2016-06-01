@@ -12,6 +12,7 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
+import java.io.Console;
 import javax.swing.*;
 
 import javax.swing.JFrame;
@@ -29,8 +30,9 @@ public class GUISimulator extends JFrame implements Runnable {
     public static final int HEIGHT = 600;
 
 
-    private JLabel outputConsole;
-    private JPanel gridWrapper;
+    private JPanel pnlGridWrapper;
+	private JLabel lblConsole;
+
 
 	/**
 	 * @param arg0
@@ -42,27 +44,24 @@ public class GUISimulator extends JFrame implements Runnable {
 
 	private void createGUI(){
         setSize(WIDTH, HEIGHT);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //use a default border layout for the window
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        gridWrapper = gridBagPanel();
-        outputConsole = returnOutputConsole();
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.anchor = GridBagConstraints.CENTER;
 
 
 
-        //add the gridbag wrapper in which to place other elements
-        getContentPane().add(gridWrapper,BorderLayout.CENTER);
-        gridWrapper.add(outputConsole, GridBagConstraints.PAGE_START);
+		pnlGridWrapper = gridBagPanel();
+		lblConsole = createOutputConsole();
 
 
-        /*
-        this.getContentPane().add(pnlOne,BorderLayout.CENTER);
-        this.getContentPane().add(pnlTwo,BorderLayout.NORTH);
-        this.getContentPane().add(pnlThree,BorderLayout.SOUTH);
-        this.getContentPane().add(pnlFour,BorderLayout.EAST);
-        this.getContentPane().add(pnlFive,BorderLayout.WEST);
-        */
+		this.getContentPane().add(pnlGridWrapper,BorderLayout.CENTER);
+		addToPanel(lblConsole, pnlGridWrapper, constraints, 0,0,600, 450);
+
+
 
 
         repaint();
@@ -70,10 +69,18 @@ public class GUISimulator extends JFrame implements Runnable {
 
 	}
 
-    private JLabel returnOutputConsole(){
+	private void addToPanel(Component component, JPanel jp, GridBagConstraints constr, int x, int y, int width, int height) {
+		constr.gridx = x;
+		constr.gridy = y;
+		constr.gridwidth = width;
+		constr.gridheight = height;
+		jp.add(component, constr);
+	}
+
+    private JLabel createOutputConsole(){
         JLabel oc = new JLabel();
-        oc.setBackground(Color.WHITE);
-        oc.setPreferredSize(new Dimension(200, 180));
+        oc.setBackground(Color.BLUE);
+        oc.setPreferredSize(new Dimension(600, 450));
         return oc;
     }
 
@@ -85,7 +92,8 @@ public class GUISimulator extends JFrame implements Runnable {
 
     private JPanel gridBagPanel() {
         JPanel jp = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+
+
 
         //For each component to be added to this container:
         //...Create the component...
@@ -101,7 +109,6 @@ public class GUISimulator extends JFrame implements Runnable {
 	@Override
 	public void run() {
 		createGUI();
-
 	}
 
 	/**
