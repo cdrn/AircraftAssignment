@@ -6,17 +6,23 @@
  */
 package asgn2Simulators;
 
-import asgn2Passengers.Business;
+import asgn2Aircraft.AircraftException;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.*;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.border.Border;
+
+import asgn2Passengers.PassengerException;
 
 
 /**
@@ -24,84 +30,95 @@ import javax.swing.border.Border;
  *
  */
 @SuppressWarnings("serial")
-public class GUISimulator extends JFrame implements Runnable {
+public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private static final long serialVersionUID = -7031008862559936404L;
     public static final int WIDTH = 800;
     public static final int HEIGHT = 700;
 
     private JPanel pnlConsole;
-	private JPanel pnlErrors;
+    private JPanel pnlErrors;
     private JPanel pnlPassengerSeeds;
     private JPanel pnlSimulation;
     private JPanel pnlButtons;
 
-	private JButton btnRun;
-	private JButton btnShowGraph;
 
-	private JLabel lblSIMULATION;
-	private JLabel lblRandSeed;
+    private JLabel outputLabel;
+
+    private JButton btnRun;
+    private JButton btnShowGraph;
+
+    private JLabel lblSIMULATION;
+    private JLabel lblRandSeed;
     private JTextField randSeedTextField;
-	private JLabel lblDailyMean;
+    private JLabel lblDailyMean;
     private JTextField dailyMeanTextField;
-	private JLabel lblQueueSeed;
+    private JLabel lblQueueSeed;
     private JTextField queueSeedTextField;
-	private JLabel lblCancellation;
+    private JLabel lblCancellation;
     private JTextField cancellationTextField;
 
-	private JLabel lblPASSENGERSEEDS;
-	private JLabel lblFirst;
+    private JLabel lblPASSENGERSEEDS;
+    private JLabel lblFirst;
     private JTextField firstTextField;
-	private JLabel lblBusiness;
+    private JLabel lblBusiness;
     private JTextField businessTextField;
-	private JLabel lblPremium;
+    private JLabel lblPremium;
     private JTextField premiumTextField;
-	private JLabel lblEconomy;
+    private JLabel lblEconomy;
     private JTextField economyTextField;
 
-	private JLabel lblExceptionHeader;
-	private JLabel lblException;
+    private JLabel lblExceptionHeader;
+    private JLabel lblException;
 
 
+    //setup a simulator and log for the sim code
+    private Simulator sim;
+    private Log log;
 
-	/**
-	 * @param arg0
-	 * @throws HeadlessException
-	 */
-	public GUISimulator(String arg0) throws HeadlessException {
-		super(arg0);
-	}
 
-	private void createGUI(){
+    /**
+     * @param arg0
+     * @throws HeadlessException
+     */
+    public GUISimulator(String arg0) throws HeadlessException {
+        super(arg0);
+    }
+
+    private void createGUI() {
         setSize(WIDTH, HEIGHT);
         //use a default border layout for the window
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.anchor = GridBagConstraints.CENTER;
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.anchor = GridBagConstraints.CENTER;
 
-		pnlConsole = createPanel(Color.pink);
+        pnlConsole = createPanel(Color.pink);
         Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
         pnlConsole.setBorder(border);
-		createSimulationPanel();
+
+
+
+        createOutputPanel();
+        createSimulationPanel();
         createPassengerSeedsPanel();
         createButtonPanel();
         createExceptionPanel();
 
-		this.getContentPane().add(pnlConsole,BorderLayout.NORTH);
-		pnlConsole.setPreferredSize(new Dimension(800, 300));
+        this.getContentPane().add(pnlConsole, BorderLayout.NORTH);
+        pnlConsole.setPreferredSize(new Dimension(800, 300));
 
         repaint();
         this.setVisible(true);
 
-	}
+    }
 
-	private void addToPanel(Component component, JPanel jp, GridBagConstraints constr) {
-		jp.add(component, constr);
-	}
+    private void addToPanel(Component component, JPanel jp, GridBagConstraints constr) {
+        jp.add(component, constr);
+    }
 
-    private JLabel createOutputConsole(){
+    private JLabel createOutputConsole() {
         JLabel oc = new JLabel();
         oc.setBackground(Color.RED);
         //oc.setPreferredSize(new Dimension(600, 450));
@@ -114,7 +131,16 @@ public class GUISimulator extends JFrame implements Runnable {
         return jp;
     }
 
-    private void createExceptionPanel(){
+
+    private void createOutputPanel(){
+        outputLabel = createOutputConsole();
+        GridBagLayout layout = new GridBagLayout();
+        outputLabel.setLayout(layout);
+        pnlConsole.add(outputLabel, BorderLayout.CENTER);
+        pnlConsole.setPreferredSize(new Dimension(250, 100));
+    }
+
+    private void createExceptionPanel() {
 
         GridBagConstraints constraints = new GridBagConstraints();
         pnlErrors = createPanel(Color.CYAN);
@@ -125,8 +151,10 @@ public class GUISimulator extends JFrame implements Runnable {
 
     }
 
-    private void createButtonPanel(){
+    private void createButtonPanel() {
 
+
+        //basic setup of the wrapper panel for the buttons
         GridBagConstraints constraints = new GridBagConstraints();
         pnlButtons = createPanel(Color.GREEN);
         GridBagLayout layout = new GridBagLayout();
@@ -134,18 +162,22 @@ public class GUISimulator extends JFrame implements Runnable {
         this.getContentPane().add(pnlButtons, BorderLayout.EAST);
         pnlButtons.setPreferredSize(new Dimension(250, 100));
 
+        //create the two buttons we want
         btnRun = new JButton("Run");
         btnShowGraph = new JButton("show the graph");
 
+
+        //adds the buttons to the button panel
         addToPanel(btnRun, pnlButtons, constraints);
         addToPanel(btnShowGraph, pnlButtons, constraints);
 
-
-
+        //Adds both buttons to the event listener in this class
+        btnRun.addActionListener(this);
+        btnShowGraph.addActionListener(this);
 
     }
 
-    private void createPassengerSeedsPanel(){
+    private void createPassengerSeedsPanel() {
         //Set up a gridbagconstraints object
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -165,6 +197,7 @@ public class GUISimulator extends JFrame implements Runnable {
         pnlPassengerSeeds = createPanel(Color.BLUE);
         GridBagLayout layout = new GridBagLayout();
         pnlPassengerSeeds.setLayout(layout);
+
         this.getContentPane().add(pnlPassengerSeeds, BorderLayout.CENTER);
         pnlPassengerSeeds.setPreferredSize(new Dimension(250, 100));
 
@@ -175,7 +208,7 @@ public class GUISimulator extends JFrame implements Runnable {
         constraints.ipady = 1;      //make this component tall
         constraints.weightx = 5;
         constraints.weighty = 1;
-        constraints.ipadx=3;
+        constraints.ipadx = 3;
         constraints.gridwidth = 3;
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -185,14 +218,14 @@ public class GUISimulator extends JFrame implements Runnable {
         constraints.weightx = 5;
         constraints.anchor = GridBagConstraints.CENTER;
         addToPanel(firstTextField, pnlPassengerSeeds, constraints);
-        
+
         //setup button and label for dailyMean
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.ipady = 1;      //make this component tall
         constraints.weightx = 5;
         constraints.weighty = 1;
-        constraints.ipadx=3;
+        constraints.ipadx = 3;
         constraints.gridwidth = 3;
         constraints.gridx = 0;
         constraints.gridy = 1;
@@ -210,7 +243,7 @@ public class GUISimulator extends JFrame implements Runnable {
         constraints.ipady = 1;      //make this component tall
         constraints.weightx = 5;
         constraints.weighty = 1;
-        constraints.ipadx=3;
+        constraints.ipadx = 3;
         constraints.gridwidth = 3;
         constraints.gridx = 0;
         constraints.gridy = 2;
@@ -227,7 +260,7 @@ public class GUISimulator extends JFrame implements Runnable {
         constraints.ipady = 1;      //make this component tall
         constraints.weightx = 5;
         constraints.weighty = 1;
-        constraints.ipadx=3;
+        constraints.ipadx = 3;
         constraints.gridwidth = 3;
         constraints.gridx = 0;
         constraints.gridy = 3;
@@ -258,11 +291,11 @@ public class GUISimulator extends JFrame implements Runnable {
         lblCancellation = new JLabel("Cancellation");
         cancellationTextField = new JTextField(5);
 
-		pnlSimulation = createPanel(Color.RED);
-		GridBagLayout layout = new GridBagLayout();
-		pnlSimulation.setLayout(layout);
-		this.getContentPane().add(pnlSimulation, BorderLayout.WEST);
-		pnlSimulation.setPreferredSize(new Dimension(250, 100));
+        pnlSimulation = createPanel(Color.RED);
+        GridBagLayout layout = new GridBagLayout();
+        pnlSimulation.setLayout(layout);
+        this.getContentPane().add(pnlSimulation, BorderLayout.WEST);
+        pnlSimulation.setPreferredSize(new Dimension(250, 100));
 
 
         //Set the button and label for randseed
@@ -271,11 +304,11 @@ public class GUISimulator extends JFrame implements Runnable {
         constraints.ipady = 1;      //make this component tall
         constraints.weightx = 5;
         constraints.weighty = 1;
-        constraints.ipadx=3;
+        constraints.ipadx = 3;
         constraints.gridwidth = 3;
         constraints.gridx = 0;
         constraints.gridy = 0;
-		addToPanel(lblRandSeed, pnlSimulation, constraints);
+        addToPanel(lblRandSeed, pnlSimulation, constraints);
 
         constraints.gridx = 1;
         constraints.weightx = 5;
@@ -289,7 +322,7 @@ public class GUISimulator extends JFrame implements Runnable {
         constraints.ipady = 1;      //make this component tall
         constraints.weightx = 5;
         constraints.weighty = 1;
-        constraints.ipadx=3;
+        constraints.ipadx = 3;
         constraints.gridwidth = 3;
         constraints.gridx = 0;
         constraints.gridy = 1;
@@ -301,14 +334,13 @@ public class GUISimulator extends JFrame implements Runnable {
         addToPanel(dailyMeanTextField, pnlSimulation, constraints);
 
 
-
         //button and label for QueueSeed
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.ipady = 1;      //make this component tall
         constraints.weightx = 5;
         constraints.weighty = 1;
-        constraints.ipadx=3;
+        constraints.ipadx = 3;
         constraints.gridwidth = 3;
         constraints.gridx = 0;
         constraints.gridy = 2;
@@ -325,7 +357,7 @@ public class GUISimulator extends JFrame implements Runnable {
         constraints.ipady = 1;      //make this component tall
         constraints.weightx = 5;
         constraints.weighty = 1;
-        constraints.ipadx=3;
+        constraints.ipadx = 3;
         constraints.gridwidth = 3;
         constraints.gridx = 0;
         constraints.gridy = 3;
@@ -338,21 +370,82 @@ public class GUISimulator extends JFrame implements Runnable {
 
     }
 
-	/* (non-Javadoc)
+    public void runSimulation() throws AircraftException, PassengerException, SimulationException, IOException {
+        this.sim.createSchedule();
+        this.log.initialEntry(this.sim);
+
+        //Main simulation loop
+        for (int time = 0; time <= Constants.DURATION; time++) {
+            this.sim.resetStatus(time);
+            this.sim.generateAndHandleBookings(time);
+            this.sim.processNewCancellations(time);
+            if (time >= Constants.FIRST_FLIGHT) {
+                this.sim.processUpgrades(time);
+                this.sim.processQueue(time);
+                this.sim.flyPassengers(time);
+                this.sim.updateTotalCounts(time);
+                this.log.logFlightEntries(time, sim);
+            } else {
+                this.sim.processQueue(time);
+            }
+            //Log progress
+            this.log.logQREntries(time, sim);
+            this.log.logEntry(time, this.sim);
+        }
+        this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
+        this.log.logQREntries(Constants.DURATION, sim);
+        this.log.finalise(this.sim);
+    }
+
+
+    //Event listener for GUI buttons and forms
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+
+        //action listener, if the button is enabled, do thing.
+
+        if (btnRun.getModel().isArmed()) {
+            try {
+                runSimulation();
+            } catch (AircraftException e1) {
+                e1.printStackTrace();
+            } catch (PassengerException e1) {
+                e1.printStackTrace();
+            } catch (SimulationException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        if (btnShowGraph.getModel().isArmed()) {
+            outputLabel.setText("the button has been clicked dude");
+            pnlErrors.setBackground(Color.pink);
+
+        }
+
+
+    }
+
+
+    /* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
-	@Override
-	public void run() {
-		createGUI();
-	}
+    @Override
+    public void run() {
+        createGUI();
+    }
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		JFrame.setDefaultLookAndFeelDecorated(true);
-		SwingUtilities.invokeLater(new GUISimulator("BorderLayout"));
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        SwingUtilities.invokeLater(new GUISimulator("BorderLayout"));
 
-	}
+    }
+
+
 
 }
