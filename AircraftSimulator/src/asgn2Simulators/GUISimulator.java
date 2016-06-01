@@ -8,6 +8,8 @@ package asgn2Simulators;
 
 import asgn2Aircraft.AircraftException;
 
+import asgn2Simulators.Constants;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
@@ -98,13 +100,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
         pnlConsole.setBorder(border);
 
-
-
         createOutputPanel();
         createSimulationPanel();
         createPassengerSeedsPanel();
         createButtonPanel();
         createExceptionPanel();
+        setDefaultValues();
 
         this.getContentPane().add(pnlConsole, BorderLayout.NORTH);
         pnlConsole.setPreferredSize(new Dimension(800, 300));
@@ -129,6 +130,23 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         JPanel jp = new JPanel();
         jp.setBackground(c);
         return jp;
+    }
+
+    //populate the default values by parsing to string from constants file
+    private void setDefaultValues(){
+
+        //set the defaults for seed fields
+        randSeedTextField.setText(String.valueOf(Constants.DEFAULT_SEED));
+        dailyMeanTextField.setText(String.valueOf(Constants.DEFAULT_DAILY_BOOKING_MEAN));
+        queueSeedTextField.setText(String.valueOf(Constants.DEFAULT_MAX_QUEUE_SIZE));
+        cancellationTextField.setText(String.valueOf(Constants.DEFAULT_CANCELLATION_PROB));
+
+        //set defaults for aircraft passenger probabilities
+        firstTextField.setText(String.valueOf(Constants.DEFAULT_FIRST_PROB));
+        premiumTextField.setText(String.valueOf(Constants.DEFAULT_PREMIUM_PROB));
+        businessTextField.setText(String.valueOf(Constants.DEFAULT_BUSINESS_PROB));
+        economyTextField.setText(String.valueOf(Constants.DEFAULT_ECONOMY_PROB));
+
     }
 
 
