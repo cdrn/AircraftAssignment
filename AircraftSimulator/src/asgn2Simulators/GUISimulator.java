@@ -44,7 +44,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JPanel pnlButtons;
 
 
-    private JLabel outputLabel;
+    private JTextArea outputLabel;
 
     private JButton btnRun;
     private JButton btnShowGraph;
@@ -151,7 +151,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
 
     private void createOutputPanel(){
-        outputLabel = createOutputConsole();
+        outputLabel = new JTextArea();
+        //try to add a scrollbar??
+        JScrollPane scroll = new JScrollPane (outputLabel);
+        scroll.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
+        pnlConsole.add(scroll);
+        //
         GridBagLayout layout = new GridBagLayout();
         outputLabel.setLayout(layout);
         pnlConsole.add(outputLabel, BorderLayout.CENTER);
@@ -389,6 +394,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
     public void runSimulation() throws AircraftException, PassengerException, SimulationException, IOException {
+
+        sim = new Simulator();
+        log = new Log();
+
         this.sim.createSchedule();
         this.log.initialEntry(this.sim);
 
@@ -409,10 +418,39 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             //Log progress
             this.log.logQREntries(time, sim);
             this.log.logEntry(time, this.sim);
+            outputLabel.append(sim + "\n");
         }
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.log.logQREntries(Constants.DURATION, sim);
         this.log.finalise(this.sim);
+
+    }
+
+    /**
+     * Helper to process args for Simulator
+     *
+     * @param args Command line arguments (see usage message)
+     * @return new <code>Simulator</code> from the arguments
+     * @throws SimulationException if invalid arguments.
+     * See {@link asgn2Simulators.Simulator#Simulator(int, int, double, double, double, double, double, double, double)}
+     */
+    private static Simulator createSimulatorUsingArgs(String[] args) throws SimulationException {
+        int seed = Integer.parseInt(args[0]);
+        int maxQueueSize = Integer.parseInt(args[1]);
+        double meanBookings = Double.parseDouble(args[2]);
+        double sdBookings = Double.parseDouble(args[3]);
+        double firstProb = Double.parseDouble(args[4]);
+        double businessProb = Double.parseDouble(args[5]);
+        double premiumProb = Double.parseDouble(args[6]);
+        double economyProb = Double.parseDouble(args[7]);
+        double cancelProb = Double.parseDouble(args[8]);
+        return new Simulator(seed,maxQueueSize,meanBookings,sdBookings,firstProb,businessProb,
+                premiumProb,economyProb,cancelProb);
+    }
+
+    public void SimulationRunner(Simulator sim, Log log) {
+        this.sim = sim;
+        this.log = log;
     }
 
 
@@ -435,6 +473,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+            //outputLabel.append(String.valueOf(sim.getDailyBookings()));
         }
 
         if (btnShowGraph.getModel().isArmed()) {

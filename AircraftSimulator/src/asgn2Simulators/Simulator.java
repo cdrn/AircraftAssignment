@@ -273,7 +273,7 @@ public class Simulator {
 	 * 
 	 * @param departureTime <code>int</code> schedule to retrieve
 	 * @return <code>Flights</code> for the day 
-	 * @throws SimulationException if (departureTime < FIRST_FLIGHT) OR 
+	 * @throws SimulationException if (detupartureTime < FIRST_FLIGHT) OR
 	 * (departureTime > DURATION)
 	 */
 	public Flights getFlights(int departureTime) throws SimulationException {
