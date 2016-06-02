@@ -1,10 +1,11 @@
 package asgn2Simulators;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import javax.swing.JPanel;
+import javax.swing.*;
+import javax.swing.border.Border;
 
 import org.jfree.chart.ChartFactory;
 
@@ -21,14 +22,15 @@ import org.jfree.ui.ApplicationFrame;
 import asgn2Aircraft.AircraftException;
 import asgn2Passengers.PassengerException;
 
-import java.awt.Color;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.ui.RefineryUtilities;
 
 
 public class reportChart extends ApplicationFrame{
 
-    private static final String TITLE1 = "Booking Details";
-    private static final String TITLE2 = "Queued and Refused Passengers";
+    private static final String TITLE1 = "Bookings Over Time";
+    private static final String TITLE2 = "Refused and Queued Passengers Over Time";
+
 
     /**
      * Constructor shares the work with the run method.
@@ -53,17 +55,14 @@ public class reportChart extends ApplicationFrame{
         final XYDataset dataSet = createChartAData(sim);
         final JFreeChart chart = createChartA(dataSet);
         final ChartPanel chartPanel = new ChartPanel(chart);
-        JPanel btnPanel = new JPanel(new FlowLayout());
-        this.add(btnPanel, BorderLayout.SOUTH);
         setContentPane(chartPanel);
+
     }
 
     public void ChartB(Simulator sim) throws SimulationException, PassengerException, AircraftException {
         final XYDataset dataSet = createChartBData(sim);
         final JFreeChart chart = createChartB(dataSet);
         final ChartPanel chartPanel = new ChartPanel(chart);
-        JPanel btnPanel = new JPanel(new FlowLayout());
-        this.add(btnPanel, BorderLayout.SOUTH);
         setContentPane(chartPanel);
     }
 
@@ -258,15 +257,10 @@ public class reportChart extends ApplicationFrame{
         return result;
     }
 
-    /**PLACE THIS IN YOUR GUI SIM CODE**/
-    /*
-    public static void main( String[ ] args ) throws Exception
-    {
-       Simulator sim = new Simulator();
-       final createChart chart = new createChart("Output Chart", 0, sim);
-       chart.pack( );
-       RefineryUtilities.centerFrameOnScreen(chart);
-       chart.setVisible(true);
-    }
-*/
+
+
+
+
+
+
 }

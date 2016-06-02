@@ -38,7 +38,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private reportChart chart;
 
     private JButton btnRun;
-    private JButton btnShowGraph;
+    private JButton btnShowGraph1;
+    private JButton btnShowGraph2;
 
     private JTextField randSeedTextField;
     private JTextField dailyMeanTextField;
@@ -71,7 +72,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         setUIFont (new javax.swing.plaf.FontUIResource("Courier New",Font.PLAIN,14));
 
         //use a default border layout for the window
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         GridBagConstraints constraints = new GridBagConstraints();
@@ -207,8 +208,11 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
         //create the two buttons we want
         btnRun = new JButton("Run");
-        btnShowGraph = new JButton("show the graph");
-        btnShowGraph.setEnabled(false);
+        btnShowGraph1 = new JButton("Show Graph(ALL)");
+        btnShowGraph1.setEnabled(false);
+
+        btnShowGraph2 = new JButton("Show Graph(REFUSED)");
+        btnShowGraph2.setEnabled(false);
 
 
         //add run button to pnlButtons
@@ -227,11 +231,16 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         //add graph button to pnlButtons
         constraints.insets = new Insets(30, 45, 0,0);
         constraints.gridy=2;
-        addToPanel(btnShowGraph, pnlButtons, constraints);
+        addToPanel(btnShowGraph1, pnlButtons, constraints);
+
+        constraints.insets = new Insets(30, 30,0,0);
+        constraints.gridy = 3;
+        addToPanel(btnShowGraph2, pnlButtons, constraints);
 
         //Adds both buttons to the event listener in this class
         btnRun.addActionListener(this);
-        btnShowGraph.addActionListener(this);
+        btnShowGraph1.addActionListener(this);
+        btnShowGraph2.addActionListener(this);
 
     }
 
@@ -509,7 +518,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                 checkProbabilityInput(args);
                 runSimulation(createSimulatorUsingArgs(args));
                 lblException.setVisible(false);
-                btnShowGraph.setEnabled(true);
+                btnShowGraph1.setEnabled(true);
+                btnShowGraph2.setEnabled(true);
 
             } catch (AircraftException | PassengerException | SimulationException | IOException e1) {
                 e1.printStackTrace();
@@ -526,11 +536,11 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             setDefaultValues();
         }
 
-        if (btnShowGraph.getModel().isArmed()) {
+        if (btnShowGraph1.getModel().isArmed()) {
 
             try{
                 String[] argsFromForm = argsPopulateFromForm();
-                chart = new reportChart("Flight Details", 0, createSimulatorUsingArgs(argsFromForm));
+                chart = new reportChart("All Bookings over time", 0, createSimulatorUsingArgs(argsFromForm));
             } catch(Exception e2){
                 JOptionPane.showMessageDialog(this, e2.getMessage(), "Exception found running chart", JOptionPane.WARNING_MESSAGE);
             }
@@ -541,6 +551,18 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         }
 
 
+        //graph2
+        if (btnShowGraph2.getModel().isArmed()) {
+            try{
+                String[] argsFromForm = argsPopulateFromForm();
+                chart = new reportChart("Refused and Queued Passengers", 1, createSimulatorUsingArgs(argsFromForm));
+            }catch(Exception e2){
+                JOptionPane.showMessageDialog(this, e2.getMessage(), "Exception found running chart", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        chart.pack();
+        RefineryUtilities.centerFrameOnScreen(chart);
+        chart.setVisible(true);
     }
 
 
