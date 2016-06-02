@@ -65,7 +65,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JLabel lblEconomy;
     private JTextField economyTextField;
 
-    private JLabel lblExceptionHeader;
     private JLabel lblException;
 
     Font defaultFont = new Font("Courier New", Font.BOLD, 16);
@@ -186,18 +185,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.getContentPane().add(pnlErrors, BorderLayout.SOUTH);
         pnlErrors.setPreferredSize(new Dimension(250, 100));
 
-        lblExceptionHeader = new JLabel("#3====D<");
-        lblExceptionHeader.setFont(new Font("Courier New", Font.BOLD, 20));
-        lblExceptionHeader.setForeground(Color.RED);
-        lblExceptionHeader.setVisible(false);
 
         lblException = new JLabel("we have encountered an exception my dude");
-        lblException.setFont(new Font("Courier New", Font.BOLD, 16));
+        lblException.setFont(new Font("Courier New", Font.BOLD, 15));
         lblException.setForeground(Color.RED);
         lblException.setVisible(false);
 
 
-        //header label
+        //exception label
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.ipady = 1;
@@ -207,12 +202,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         constraints.gridwidth = 3;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.insets = new Insets(0,50,0,0);
-        addToPanel(lblExceptionHeader, pnlErrors, constraints);
-
-        //exception label
-        constraints.gridx = 1;
-        constraints.insets = new Insets (0,180,0,0);
+        constraints.insets = new Insets(0,20,0,0);
         addToPanel(lblException, pnlErrors, constraints);
 
 
@@ -519,24 +509,20 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             //try to run the simulation and print with the argument params
             try {
                 runSimulation(createSimulatorUsingArgs(args));
-                lblExceptionHeader.setVisible(false);
                 lblException.setVisible(false);
 
             } catch (AircraftException e1) {
                 e1.printStackTrace();
-                lblExceptionHeader.setVisible(true);
                 lblException.setText(e1.getMessage());
                 lblException.setVisible(true);
 
             } catch (PassengerException e1) {
                 e1.printStackTrace();
-                lblExceptionHeader.setVisible(true);
                 lblException.setText(e1.getMessage());
                 lblException.setVisible(true);
 
             } catch (SimulationException e1) {
                 e1.printStackTrace();
-                lblExceptionHeader.setVisible(true);
                 lblException.setText(e1.getMessage());
                 lblException.setVisible(true);
 
