@@ -61,7 +61,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
 
     /**
-     * @param arg0
+     * @param arg0 list of arguments contained in GUI components
      * @throws HeadlessException
      */
     public GUISimulator(String arg0) throws HeadlessException {
@@ -154,7 +154,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         scrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         pnlConsole.add(scrollPanel, BorderLayout.NORTH);
-        pnlConsole.setSize(800, 300);
         pnlConsole.add(scrollPanel);
     }
 
@@ -398,7 +397,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     }
 
-    public void runSimulation(Simulator paramSim) throws AircraftException, PassengerException, SimulationException, IOException {
+    private void runSimulation(Simulator paramSim) throws AircraftException, PassengerException, SimulationException, IOException {
 
         sim = paramSim;
         log = new Log();
@@ -526,7 +525,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
     /**
-     * @param args
+     * @param args required for Swing
      */
     public static void main(String[] args) {
         JFrame.setDefaultLookAndFeelDecorated(true);
