@@ -8,7 +8,7 @@ package asgn2Simulators;
 
 import asgn2Passengers.PassengerException;
 import asgn2Aircraft.AircraftException;
-import sun.java2d.windows.GDIRenderer;
+
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -134,13 +134,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
 
-    private JLabel createOutputConsole() {
-        JLabel oc = new JLabel();
-        oc.setBackground(Color.RED);
-        //oc.setPreferredSize(new Dimension(600, 450));
-        return oc;
-    }
-
     private JPanel createPanel(Color c) {
         JPanel jp = new JPanel();
         jp.setBackground(c);
@@ -168,18 +161,17 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private void createOutputPanel(){
 
-        //TODO
-        outputLabel = new JTextArea();
-        outputLabel.setBounds(18, 21, 400, 200);
-        //try to add a scrollbar??
-        JScrollPane sp = new JScrollPane(outputLabel);
-        sp.setBounds(18, 21, 400, 200);
-        pnlConsole.add(sp);
-        //
+        outputLabel = new JTextArea(16, 90);
+        outputLabel.setEditable(false);
+
         GridBagLayout layout = new GridBagLayout();
         outputLabel.setLayout(layout);
-        pnlConsole.add(outputLabel, BorderLayout.CENTER);
+        JScrollPane scrollPanel = new JScrollPane(outputLabel);
+        scrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        pnlConsole.add(scrollPanel, BorderLayout.CENTER);
         pnlConsole.setSize(800, 300);
+        pnlConsole.add(scrollPanel);
 
     }
 
