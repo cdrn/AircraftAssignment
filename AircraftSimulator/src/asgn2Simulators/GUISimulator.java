@@ -482,7 +482,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     Just check if the arguments are valid
 */
     public void checkProbabilityInput(String args[]) throws Exception {
-        if (Double.parseDouble(args[4]) + Double.parseDouble(args[45]) + Double.parseDouble(args[6]) + Double.parseDouble(args[7]) != 1){
+        if (Double.parseDouble(args[4]) + Double.parseDouble(args[5]) + Double.parseDouble(args[6]) + Double.parseDouble(args[7]) != 1.0){
             throw new Exception("Probability arguments must equal 1");
         }
 
