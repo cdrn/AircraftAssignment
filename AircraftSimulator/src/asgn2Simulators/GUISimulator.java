@@ -145,13 +145,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private void createOutputPanel(){
 
-        outputLabel = new JTextArea(16, 90);
+        outputLabel = new JTextArea(16, 60);
         outputLabel.setEditable(false);
 
         GridBagLayout layout = new GridBagLayout();
         outputLabel.setLayout(layout);
         JScrollPane scrollPanel = new JScrollPane(outputLabel);
         scrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
 
         pnlConsole.add(scrollPanel, BorderLayout.NORTH);
         pnlConsole.add(scrollPanel);
