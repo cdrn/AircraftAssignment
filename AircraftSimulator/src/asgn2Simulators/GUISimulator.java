@@ -496,13 +496,11 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                 runSimulation(createSimulatorUsingArgs(args));
                 lblException.setVisible(false);
 
-            } catch (AircraftException | PassengerException | SimulationException e1) {
+            } catch (AircraftException | PassengerException | SimulationException | IOException e1) {
                 e1.printStackTrace();
                 lblException.setText(e1.getMessage());
                 lblException.setVisible(true);
 
-            } catch (IOException e1) {
-                e1.printStackTrace();
             }
 
             //Reset the user input values in the textfields
