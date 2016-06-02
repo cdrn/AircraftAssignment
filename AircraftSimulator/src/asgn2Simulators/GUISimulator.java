@@ -444,11 +444,13 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             } else {
                 this.sim.processQueue(time);
             }
+
+
+            boolean flying = (time >= Constants.FIRST_FLIGHT);
+            outputLabel.append(sim.getSummary(time, flying));
             //Log progress
             this.log.logQREntries(time, sim);
             this.log.logEntry(time, this.sim);
-            boolean flying = (time >= Constants.FIRST_FLIGHT);
-            outputLabel.append(sim.getSummary(time, flying));
         }
        // this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.log.logQREntries(Constants.DURATION, sim);
@@ -490,6 +492,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         args[0] = randSeedTextField.getText();
         args[1] = queueSeedTextField.getText();
         args[2] = dailyMeanTextField.getText();
+        args[3] = "";
         args[4] = firstTextField.getText();
         args[5] = businessTextField.getText();
         args[6] = premiumTextField.getText();
