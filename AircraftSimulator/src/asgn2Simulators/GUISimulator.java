@@ -145,7 +145,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private void createOutputPanel(){
 
-        outputLabel = new JTextArea(16, 60);
+        outputLabel = new JTextArea(16, 45);
         outputLabel.setEditable(false);
 
         GridBagLayout layout = new GridBagLayout();
