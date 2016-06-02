@@ -478,6 +478,17 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return args;
     }
 
+    /*
+    Just check if the arguments are valid
+*/
+    public void checkProbabilityInput(String args[]) throws Exception {
+        if (Double.parseDouble(args[4]) + Double.parseDouble(args[45]) + Double.parseDouble(args[6]) + Double.parseDouble(args[7]) != 1){
+            throw new Exception("Probability arguments must equal 1");
+        }
+
+    }
+
+
     //Event listener for GUI buttons and forms
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -495,6 +506,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
             //try to run the simulation and print with the argument params
             try {
+                checkProbabilityInput(args);
                 runSimulation(createSimulatorUsingArgs(args));
                 lblException.setVisible(false);
                 btnShowGraph.setEnabled(true);
@@ -504,6 +516,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                 lblException.setText(e1.getMessage());
                 lblException.setVisible(true);
 
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                lblException.setText("Probability argument must equal 1 in total");
+                lblException.setVisible(true);
             }
 
             //Reset the user input values in the textFields
