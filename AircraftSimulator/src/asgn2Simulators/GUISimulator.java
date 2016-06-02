@@ -491,6 +491,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             String args[] = argsPopulateFromForm();
 
 
+
+
             //try to run the simulation and print with the argument params
             try {
                 runSimulation(createSimulatorUsingArgs(args));
