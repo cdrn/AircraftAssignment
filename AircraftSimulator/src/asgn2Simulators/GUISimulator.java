@@ -8,6 +8,8 @@ package asgn2Simulators;
 
 import asgn2Passengers.PassengerException;
 import asgn2Aircraft.AircraftException;
+import sun.java2d.windows.GDIRenderer;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
@@ -66,6 +68,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JLabel lblExceptionHeader;
     private JLabel lblException;
 
+    Font defaultFont = new Font("Courier New", Font.BOLD, 16);
+
 
     //setup a simulator and log for the sim code
     private Simulator sim;
@@ -82,6 +86,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private void createGUI() {
         setSize(WIDTH, HEIGHT);
+        setUIFont (new javax.swing.plaf.FontUIResource("Courier New",Font.PLAIN,14));
+
         //use a default border layout for the window
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -114,6 +120,17 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     */
     private void addToPanel(Component component, JPanel jp, GridBagConstraints constr) {
         jp.add(component, constr);
+    }
+
+
+    public static void setUIFont (javax.swing.plaf.FontUIResource f){
+        java.util.Enumeration elementsInGUI = UIManager.getDefaults().keys();
+        while (elementsInGUI.hasMoreElements()) {
+            Object currentElement = elementsInGUI.nextElement();
+            Object value = UIManager.get (currentElement);
+            if (value != null && value instanceof javax.swing.plaf.FontUIResource)
+                UIManager.put (currentElement, f);
+        }
     }
 
 
@@ -166,6 +183,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     }
 
+
     private void createExceptionPanel() {
 
         GridBagConstraints constraints = new GridBagConstraints();
@@ -193,9 +211,21 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         btnShowGraph = new JButton("show the graph");
 
 
-        //adds the buttons to the button panel
-        constraints.ipady =3;
+        //add run button to pnlButtons
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.insets = new Insets(0,90, 0, 0);
+        constraints.ipady = 0;
+        constraints.weightx = 5;
+        constraints.weighty = 0;
+        constraints.ipadx = 3;
+        constraints.gridwidth = 3;
+        constraints.gridx = 1;
+        constraints.gridy = 1;
         addToPanel(btnRun, pnlButtons, constraints);
+
+        //add graph button to pnlButtons
+        constraints.insets = new Insets(30, 45, 0,0);
         constraints.gridy=2;
         addToPanel(btnShowGraph, pnlButtons, constraints);
 
@@ -210,6 +240,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         GridBagConstraints constraints = new GridBagConstraints();
 
         //Set up the new elements for the button panel
+        lblPASSENGERSEEDS = new JLabel("Passenger Seeds");
+        lblPASSENGERSEEDS.setFont(new Font("Courier New", Font.BOLD, 16));
+
         lblFirst = new JLabel("First");
         firstTextField = new JTextField(5);
 
@@ -230,7 +263,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlPassengerSeeds.setPreferredSize(new Dimension(250, 100));
 
 
-        //Set the field and label for randseed
+        //set the label for PassengerSeeds header
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.ipady = 1;      //make this component tall
@@ -240,66 +273,43 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         constraints.gridwidth = 3;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        addToPanel(lblFirst, pnlPassengerSeeds, constraints);
+        constraints.insets = new Insets(0,60,0,0);
+        addToPanel(lblPASSENGERSEEDS, pnlPassengerSeeds, constraints);
 
-        constraints.gridx = 1;
-        constraints.weightx = 5;
-        constraints.anchor = GridBagConstraints.CENTER;
-        addToPanel(firstTextField, pnlPassengerSeeds, constraints);
 
-        //setup field and label for dailyMean
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.ipady = 1;      //make this component tall
-        constraints.weightx = 5;
-        constraints.weighty = 1;
-        constraints.ipadx = 3;
-        constraints.gridwidth = 3;
-        constraints.gridx = 0;
+        //labels
+        // anchor - WEST    |   gridx - 0   |   insets - 0,20,0,0
+        //first
+        constraints.insets = new Insets(0,20,0,0);
         constraints.gridy = 1;
-        addToPanel(lblBusiness, pnlPassengerSeeds, constraints);
-
-        constraints.gridx = 1;
-        constraints.weightx = 5;
-        constraints.anchor = GridBagConstraints.CENTER;
-        addToPanel(businessTextField, pnlPassengerSeeds, constraints);
-
-
-        //button and label for QueueSeed
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.ipady = 1;      //make this component tall
-        constraints.weightx = 5;
-        constraints.weighty = 1;
-        constraints.ipadx = 3;
-        constraints.gridwidth = 3;
-        constraints.gridx = 0;
+        addToPanel(lblFirst, pnlPassengerSeeds, constraints);
+        //business
         constraints.gridy = 2;
-        addToPanel(lblPremium, pnlPassengerSeeds, constraints);
-
-        constraints.gridx = 1;
-        constraints.weightx = 5;
-        constraints.anchor = GridBagConstraints.CENTER;
-        addToPanel(premiumTextField, pnlPassengerSeeds, constraints);
-
-        //button and label for Cancellation
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.ipady = 1;      //make this component tall
-        constraints.weightx = 5;
-        constraints.weighty = 1;
-        constraints.ipadx = 3;
-        constraints.gridwidth = 3;
-        constraints.gridx = 0;
+        addToPanel(lblBusiness, pnlPassengerSeeds, constraints);
+        //premium
         constraints.gridy = 3;
+        addToPanel(lblPremium, pnlPassengerSeeds, constraints);
+        //economy
+        constraints.gridy = 4;
         addToPanel(lblEconomy, pnlPassengerSeeds, constraints);
 
+        //textFields
+        //anchor - CENTER   |   gridx - 1   |   insets- 0,100,0,0
+        //first
+        constraints.insets = new Insets(0,100,0,0);
         constraints.gridx = 1;
-        constraints.weightx = 5;
+        constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.CENTER;
+        addToPanel(firstTextField, pnlPassengerSeeds, constraints);
+        //business
+        constraints.gridy = 2;
+        addToPanel(businessTextField, pnlPassengerSeeds, constraints);
+        //premium
+        constraints.gridy = 3;
+        addToPanel(premiumTextField, pnlPassengerSeeds, constraints);
+        //economy
+        constraints.gridy = 4;
         addToPanel(economyTextField, pnlPassengerSeeds, constraints);
-
-
     }
 
     private void createSimulationPanel() {
@@ -307,6 +317,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         GridBagConstraints constraints = new GridBagConstraints();
 
         //Set up the new elements for the button panel
+        lblSIMULATION = new JLabel("Simulation");
+        lblSIMULATION.setFont(new Font("Courier New", Font.BOLD, 16));
+
         lblRandSeed = new JLabel("Rand Seed");
         randSeedTextField = new JTextField(5);
 
@@ -326,7 +339,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlSimulation.setPreferredSize(new Dimension(250, 100));
 
 
-        //Set the button and label for randseed
+        //Set Label for Simulation header
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.ipady = 1;      //make this component tall
@@ -336,64 +349,45 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         constraints.gridwidth = 3;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        addToPanel(lblRandSeed, pnlSimulation, constraints);
+        constraints.insets = new Insets(0, 60, 0, 0);
+        addToPanel(lblSIMULATION, pnlSimulation, constraints);
 
-        constraints.gridx = 1;
-        constraints.weightx = 5;
-        constraints.anchor = GridBagConstraints.CENTER;
-        addToPanel(randSeedTextField, pnlSimulation, constraints);
-
-
-        //setup button and label fordailyMean
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.ipady = 1;      //make this component tall
-        constraints.weightx = 5;
-        constraints.weighty = 1;
-        constraints.ipadx = 3;
-        constraints.gridwidth = 3;
-        constraints.gridx = 0;
+        //Set labels
+        //anchor - WEST     |   gridx - 0   |   insets - 0,10,0,0
+        //randSeed
         constraints.gridy = 1;
-        addToPanel(lblDailyMean, pnlSimulation, constraints);
-
-        constraints.gridx = 1;
-        constraints.weightx = 5;
-        constraints.anchor = GridBagConstraints.CENTER;
-        addToPanel(dailyMeanTextField, pnlSimulation, constraints);
-
-
-        //button and label for QueueSeed
-        constraints.fill = GridBagConstraints.NONE;
+        constraints.insets = new Insets(0,10,0,0);
+        addToPanel(lblRandSeed, pnlSimulation, constraints);
+        //dailyMean
         constraints.anchor = GridBagConstraints.WEST;
-        constraints.ipady = 1;      //make this component tall
-        constraints.weightx = 5;
-        constraints.weighty = 1;
-        constraints.ipadx = 3;
-        constraints.gridwidth = 3;
-        constraints.gridx = 0;
         constraints.gridy = 2;
-        addToPanel(lblQueueSeed, pnlSimulation, constraints);
-
-        constraints.gridx = 1;
-        constraints.weightx = 5;
-        constraints.anchor = GridBagConstraints.CENTER;
-        addToPanel(queueSeedTextField, pnlSimulation, constraints);
-
-        //button and label for Cancellation
-        constraints.fill = GridBagConstraints.NONE;
+        addToPanel(lblDailyMean, pnlSimulation, constraints);
+        //queueSeed
         constraints.anchor = GridBagConstraints.WEST;
-        constraints.ipady = 1;      //make this component tall
-        constraints.weightx = 5;
-        constraints.weighty = 1;
-        constraints.ipadx = 3;
-        constraints.gridwidth = 3;
-        constraints.gridx = 0;
         constraints.gridy = 3;
+        addToPanel(lblQueueSeed, pnlSimulation, constraints);
+        //cancellation
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.gridy = 4;
         addToPanel(lblCancellation, pnlSimulation, constraints);
 
+
+        //Text Fields
+        //anchor - CENTER   |   gridx - 1   |   insets - 0,50,0,0
+        //randSeed
+        constraints.gridy = 1;
+        constraints.insets = new Insets(0,50,0,0);
         constraints.gridx = 1;
-        constraints.weightx = 5;
         constraints.anchor = GridBagConstraints.CENTER;
+        addToPanel(randSeedTextField, pnlSimulation, constraints);
+        //dailyMean
+        constraints.gridy = 2;
+        addToPanel(dailyMeanTextField, pnlSimulation, constraints);
+        //queueSeed
+        constraints.gridy = 3;
+        addToPanel(queueSeedTextField, pnlSimulation, constraints);
+        //cancellation
+        constraints.gridy = 4;
         addToPanel(cancellationTextField, pnlSimulation, constraints);
 
     }

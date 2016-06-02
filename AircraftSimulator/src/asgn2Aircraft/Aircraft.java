@@ -263,7 +263,7 @@ public abstract class Aircraft {
 	 * Method used to provide the current status of the aircraft for logging. (Supplied) 
 	 * Uses private status <code>String</code>, set whenever a transition occurs. 
 	 *  
-	 * @return <code>String</code> containing current aircraft state 
+	 * @return <code>String</code> containing current aircraft state
 	 */
 	public String getStatus(int time) {
 		String str = time +"::"

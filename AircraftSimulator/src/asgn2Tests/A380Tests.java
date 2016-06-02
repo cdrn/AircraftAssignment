@@ -521,9 +521,7 @@ public class A380Tests {
         passEconomy.queuePassenger(71, 101);
         testPlane.upgradeBookings();
     }
-
-
-
+    
 
     @Test
     public void upgradeBookingsCheckFirst() throws Exception {
@@ -536,7 +534,7 @@ public class A380Tests {
     public void upgradeBookingsCheckBusiness() throws Exception{
         passPremium.confirmSeat(71, 101);
         testPlane.upgradeBookings();
-        assertEquals(testPlane.getNumPremium(), 1);
+        assertEquals(testPlane.getNumBusiness(), 1);
     }
 
     @Test
