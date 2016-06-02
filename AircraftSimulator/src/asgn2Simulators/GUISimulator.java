@@ -31,43 +31,28 @@ import javax.swing.border.Border;
 @SuppressWarnings("serial")
 public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private static final long serialVersionUID = -7031008862559936404L;
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 700;
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 700;
 
     private JPanel pnlConsole;
     private JPanel pnlErrors;
-    private JPanel pnlPassengerSeeds;
-    private JPanel pnlSimulation;
-    private JPanel pnlButtons;
 
     private JTextArea outputLabel;
 
     private JButton btnRun;
     private JButton btnShowGraph;
 
-    private JLabel lblSIMULATION;
-    private JLabel lblRandSeed;
     private JTextField randSeedTextField;
-    private JLabel lblDailyMean;
     private JTextField dailyMeanTextField;
-    private JLabel lblQueueSeed;
     private JTextField queueSeedTextField;
-    private JLabel lblCancellation;
     private JTextField cancellationTextField;
 
-    private JLabel lblPASSENGERSEEDS;
-    private JLabel lblFirst;
     private JTextField firstTextField;
-    private JLabel lblBusiness;
     private JTextField businessTextField;
-    private JLabel lblPremium;
     private JTextField premiumTextField;
-    private JLabel lblEconomy;
     private JTextField economyTextField;
 
     private JLabel lblException;
-
-    Font defaultFont = new Font("Courier New", Font.BOLD, 16);
 
 
     //setup a simulator and log for the sim code
@@ -88,7 +73,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         setUIFont (new javax.swing.plaf.FontUIResource("Courier New",Font.PLAIN,14));
 
         //use a default border layout for the window
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         GridBagConstraints constraints = new GridBagConstraints();
@@ -122,7 +107,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
 
-    public static void setUIFont (javax.swing.plaf.FontUIResource f){
+    private static void setUIFont (javax.swing.plaf.FontUIResource f){
         java.util.Enumeration elementsInGUI = UIManager.getDefaults().keys();
         while (elementsInGUI.hasMoreElements()) {
             Object currentElement = elementsInGUI.nextElement();
@@ -215,7 +200,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
         //basic setup of the wrapper panel for the buttons
         GridBagConstraints constraints = new GridBagConstraints();
-        pnlButtons = createPanel(Color.LIGHT_GRAY);
+        JPanel pnlButtons = createPanel(Color.LIGHT_GRAY);
         pnlButtons.setBorder(BorderFactory.createEtchedBorder(Color.WHITE, Color.DARK_GRAY));
 
         GridBagLayout layout = new GridBagLayout();
@@ -257,22 +242,22 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         GridBagConstraints constraints = new GridBagConstraints();
 
         //Set up the new elements for the button panel
-        lblPASSENGERSEEDS = new JLabel("Passenger Seeds");
+        JLabel lblPASSENGERSEEDS = new JLabel("Passenger Seeds");
         lblPASSENGERSEEDS.setFont(new Font("Courier New", Font.BOLD, 16));
 
-        lblFirst = new JLabel("First");
+        JLabel lblFirst = new JLabel("First");
         firstTextField = new JTextField(5);
 
-        lblBusiness = new JLabel("Business");
+        JLabel lblBusiness = new JLabel("Business");
         businessTextField = new JTextField(5);
 
-        lblPremium = new JLabel("Premium");
+        JLabel lblPremium = new JLabel("Premium");
         premiumTextField = new JTextField(5);
 
-        lblEconomy = new JLabel("Economy");
+        JLabel lblEconomy = new JLabel("Economy");
         economyTextField = new JTextField(5);
 
-        pnlPassengerSeeds = createPanel(Color.LIGHT_GRAY);
+        JPanel pnlPassengerSeeds = createPanel(Color.LIGHT_GRAY);
         pnlPassengerSeeds.setBorder( BorderFactory.createEtchedBorder(Color.WHITE, Color.DARK_GRAY));
         GridBagLayout layout = new GridBagLayout();
         pnlPassengerSeeds.setLayout(layout);
@@ -335,22 +320,22 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         GridBagConstraints constraints = new GridBagConstraints();
 
         //Set up the new elements for the button panel
-        lblSIMULATION = new JLabel("Simulation");
+        JLabel lblSIMULATION = new JLabel("Simulation");
         lblSIMULATION.setFont(new Font("Courier New", Font.BOLD, 16));
 
-        lblRandSeed = new JLabel("Rand Seed");
+        JLabel lblRandSeed = new JLabel("Rand Seed");
         randSeedTextField = new JTextField(5);
 
-        lblDailyMean = new JLabel("Daily Mean");
+        JLabel lblDailyMean = new JLabel("Daily Mean");
         dailyMeanTextField = new JTextField(5);
 
-        lblQueueSeed = new JLabel("Queue Seed");
+        JLabel lblQueueSeed = new JLabel("Queue Seed");
         queueSeedTextField = new JTextField(5);
 
-        lblCancellation = new JLabel("Cancellation");
+        JLabel lblCancellation = new JLabel("Cancellation");
         cancellationTextField = new JTextField(5);
 
-        pnlSimulation = createPanel(Color.LIGHT_GRAY);
+        JPanel pnlSimulation = createPanel(Color.LIGHT_GRAY);
         pnlSimulation.setBorder( BorderFactory.createEtchedBorder(Color.WHITE, Color.DARK_GRAY));
 
 
@@ -478,7 +463,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.log = log;
     }
 
-    public String[] argsPopulateFromForm(){
+    private String[] argsPopulateFromForm(){
         String args[] = new String[9];
         args[0] = randSeedTextField.getText();
         args[1] = queueSeedTextField.getText();
@@ -511,17 +496,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                 runSimulation(createSimulatorUsingArgs(args));
                 lblException.setVisible(false);
 
-            } catch (AircraftException e1) {
-                e1.printStackTrace();
-                lblException.setText(e1.getMessage());
-                lblException.setVisible(true);
-
-            } catch (PassengerException e1) {
-                e1.printStackTrace();
-                lblException.setText(e1.getMessage());
-                lblException.setVisible(true);
-
-            } catch (SimulationException e1) {
+            } catch (AircraftException | PassengerException | SimulationException e1) {
                 e1.printStackTrace();
                 lblException.setText(e1.getMessage());
                 lblException.setVisible(true);
