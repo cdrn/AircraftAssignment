@@ -6,17 +6,16 @@
  */
 package asgn2Simulators;
 
+
 import asgn2Passengers.PassengerException;
 import asgn2Aircraft.AircraftException;
-
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.*;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JButton;
@@ -152,7 +151,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         outputLabel.setLayout(layout);
         JScrollPane scrollPanel = new JScrollPane(outputLabel);
         scrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
 
         pnlConsole.add(scrollPanel, BorderLayout.NORTH);
         pnlConsole.add(scrollPanel);

@@ -33,18 +33,18 @@ import asgn2Simulators.Log;
  */
 public abstract class Aircraft {
 
-	protected int firstCapacity;
-	protected int businessCapacity;
-	protected int premiumCapacity;
-	protected int economyCapacity;
-	protected int capacity;
+	private int firstCapacity;
+	private int businessCapacity;
+	private int premiumCapacity;
+	private int economyCapacity;
+	private int capacity;
 		
-	protected int numFirst;
-	protected int numBusiness;
-	protected int numPremium; 
-	protected int numEconomy; 
+	private int numFirst;
+	private int numBusiness;
+	private int numPremium;
+	private int numEconomy;
 
-	protected String flightCode;
+	private String flightCode;
 	protected String type; 
 	protected int departureTime; 
 	protected String status;
