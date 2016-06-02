@@ -485,6 +485,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+
+            //Reset the user input values in the textfields
+            setDefaultValues();
         }
 
         if (btnShowGraph.getModel().isArmed()) {
