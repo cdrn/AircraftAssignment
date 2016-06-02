@@ -9,17 +9,15 @@ package asgn2Simulators;
 
 import asgn2Passengers.PassengerException;
 import asgn2Aircraft.AircraftException;
+import org.jfree.ui.RefineryUtilities;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.HeadlessException;
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.IOException;
-import javax.swing.JFrame;
-import javax.swing.JButton;
 import javax.swing.border.Border;
+
 
 
 
@@ -37,6 +35,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JPanel pnlErrors;
 
     private JTextArea outputLabel;
+    private reportChart chart;
 
     private JButton btnRun;
     private JButton btnShowGraph;
@@ -144,7 +143,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private void createOutputPanel(){
 
-        outputLabel = new JTextArea(16, 45);
+        outputLabel = new JTextArea(16, 70);
         outputLabel.setEditable(false);
 
         GridBagLayout layout = new GridBagLayout();
@@ -209,6 +208,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         //create the two buttons we want
         btnRun = new JButton("Run");
         btnShowGraph = new JButton("show the graph");
+        btnShowGraph.setEnabled(false);
 
 
         //add run button to pnlButtons
@@ -459,7 +459,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     public void SimulationRunner(Simulator sim, Log log) {
         this.sim = sim;
         this.log = log;
+
     }
+
 
     private String[] argsPopulateFromForm(){
         String args[] = new String[9];
@@ -493,6 +495,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             try {
                 runSimulation(createSimulatorUsingArgs(args));
                 lblException.setVisible(false);
+                btnShowGraph.setEnabled(true);
 
             } catch (AircraftException | PassengerException | SimulationException | IOException e1) {
                 e1.printStackTrace();
@@ -501,18 +504,27 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
             }
 
-            //Reset the user input values in the textfields
+            //Reset the user input values in the textFields
             setDefaultValues();
         }
 
         if (btnShowGraph.getModel().isArmed()) {
-            outputLabel.setText("the button has been clicked dude");
-            pnlErrors.setBackground(Color.LIGHT_GRAY);
 
+            try{
+                String[] argsFromForm = argsPopulateFromForm();
+                chart = new reportChart("Flight Details", 0, createSimulatorUsingArgs(argsFromForm));
+            } catch(Exception e2){
+                JOptionPane.showMessageDialog(this, e2.getMessage(), "Exception found running chart", JOptionPane.WARNING_MESSAGE);
+            }
+
+            chart.pack();
+            RefineryUtilities.centerFrameOnScreen(chart);
+            chart.setVisible(true);
         }
 
 
     }
+
 
 
     /* (non-Javadoc)
