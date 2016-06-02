@@ -96,7 +96,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.CENTER;
 
-        pnlConsole = createPanel(Color.pink);
+        pnlConsole = createPanel(Color.LIGHT_GRAY);
         Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
         pnlConsole.setBorder(border);
 
@@ -169,21 +169,53 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         JScrollPane scrollPanel = new JScrollPane(outputLabel);
         scrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        pnlConsole.add(scrollPanel, BorderLayout.CENTER);
+        pnlConsole.add(scrollPanel, BorderLayout.NORTH);
         pnlConsole.setSize(800, 300);
         pnlConsole.add(scrollPanel);
-
     }
 
 
     private void createExceptionPanel() {
 
         GridBagConstraints constraints = new GridBagConstraints();
-        pnlErrors = createPanel(Color.CYAN);
+        pnlErrors = createPanel(Color.LIGHT_GRAY);
+        pnlErrors.setBorder( BorderFactory.createEtchedBorder(Color.WHITE, Color.DARK_GRAY));
+
         GridBagLayout layout = new GridBagLayout();
         pnlErrors.setLayout(layout);
         this.getContentPane().add(pnlErrors, BorderLayout.SOUTH);
         pnlErrors.setPreferredSize(new Dimension(250, 100));
+
+        lblExceptionHeader = new JLabel("Exception:");
+        lblExceptionHeader.setFont(new Font("Courier New", Font.BOLD, 20));
+        lblExceptionHeader.setForeground(Color.RED);
+        lblExceptionHeader.hide();
+
+        lblException = new JLabel("we have encountered an exception my dude");
+        lblException.setFont(new Font("Courier New", Font.BOLD, 16));
+        lblException.setForeground(Color.RED);
+        lblException.hide();
+
+        //header label
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.ipady = 1;
+        constraints.weightx = 5;
+        constraints.weighty = 1;
+        constraints.ipadx = 3;
+        constraints.gridwidth = 3;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.insets = new Insets(0,50,0,0);
+        addToPanel(lblExceptionHeader, pnlErrors, constraints);
+
+        //exception label
+        constraints.gridx = 1;
+        constraints.insets = new Insets (0,180,0,0);
+        addToPanel(lblException, pnlErrors, constraints);
+
+
+
 
     }
 
@@ -192,7 +224,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
         //basic setup of the wrapper panel for the buttons
         GridBagConstraints constraints = new GridBagConstraints();
-        pnlButtons = createPanel(Color.GREEN);
+        pnlButtons = createPanel(Color.LIGHT_GRAY);
+        pnlButtons.setBorder(BorderFactory.createEtchedBorder(Color.WHITE, Color.DARK_GRAY));
+
         GridBagLayout layout = new GridBagLayout();
         pnlButtons.setLayout(layout);
         this.getContentPane().add(pnlButtons, BorderLayout.EAST);
@@ -247,7 +281,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lblEconomy = new JLabel("Economy");
         economyTextField = new JTextField(5);
 
-        pnlPassengerSeeds = createPanel(Color.BLUE);
+        pnlPassengerSeeds = createPanel(Color.LIGHT_GRAY);
+        pnlPassengerSeeds.setBorder( BorderFactory.createEtchedBorder(Color.WHITE, Color.DARK_GRAY));
         GridBagLayout layout = new GridBagLayout();
         pnlPassengerSeeds.setLayout(layout);
 
@@ -304,7 +339,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         addToPanel(economyTextField, pnlPassengerSeeds, constraints);
     }
 
-    private void createSimulationPanel() {
+        private void createSimulationPanel() {
         //Set up a gridbagconstraints object
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -324,8 +359,11 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lblCancellation = new JLabel("Cancellation");
         cancellationTextField = new JTextField(5);
 
-        pnlSimulation = createPanel(Color.RED);
-        GridBagLayout layout = new GridBagLayout();
+        pnlSimulation = createPanel(Color.LIGHT_GRAY);
+        pnlSimulation.setBorder( BorderFactory.createEtchedBorder(Color.WHITE, Color.DARK_GRAY));
+
+
+            GridBagLayout layout = new GridBagLayout();
         pnlSimulation.setLayout(layout);
         this.getContentPane().add(pnlSimulation, BorderLayout.WEST);
         pnlSimulation.setPreferredSize(new Dimension(250, 100));
@@ -412,9 +450,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             boolean flying = (time >= Constants.FIRST_FLIGHT);
             outputLabel.append(sim.getSummary(time, flying));
         }
-        this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
+       // this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.log.logQREntries(Constants.DURATION, sim);
         this.log.finalise(this.sim);
+
         outputLabel.append(sim.finalState());
 
     }
@@ -476,12 +515,24 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             //try to run the simulation and print with the argument params
             try {
                 runSimulation(createSimulatorUsingArgs(args));
+                lblExceptionHeader.hide();
+                lblException.hide();
+
             } catch (AircraftException e1) {
                 e1.printStackTrace();
+                lblExceptionHeader.show();
+                lblException.show();
+
             } catch (PassengerException e1) {
                 e1.printStackTrace();
+                lblExceptionHeader.show();
+                lblException.show();
+
             } catch (SimulationException e1) {
                 e1.printStackTrace();
+                lblExceptionHeader.show();
+                lblException.show();
+
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -492,7 +543,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
         if (btnShowGraph.getModel().isArmed()) {
             outputLabel.setText("the button has been clicked dude");
-            pnlErrors.setBackground(Color.pink);
+            pnlErrors.setBackground(Color.LIGHT_GRAY);
 
         }
 
