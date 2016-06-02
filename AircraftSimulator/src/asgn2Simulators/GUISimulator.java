@@ -186,15 +186,16 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.getContentPane().add(pnlErrors, BorderLayout.SOUTH);
         pnlErrors.setPreferredSize(new Dimension(250, 100));
 
-        lblExceptionHeader = new JLabel("Exception:");
+        lblExceptionHeader = new JLabel("#3====D<");
         lblExceptionHeader.setFont(new Font("Courier New", Font.BOLD, 20));
         lblExceptionHeader.setForeground(Color.RED);
-        lblExceptionHeader.hide();
+        lblExceptionHeader.setVisible(false);
 
         lblException = new JLabel("we have encountered an exception my dude");
         lblException.setFont(new Font("Courier New", Font.BOLD, 16));
         lblException.setForeground(Color.RED);
-        lblException.hide();
+        lblException.setVisible(false);
+
 
         //header label
         constraints.fill = GridBagConstraints.NONE;
@@ -452,7 +453,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             this.log.logQREntries(time, sim);
             this.log.logEntry(time, this.sim);
         }
-       // this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
+       //this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.log.logQREntries(Constants.DURATION, sim);
         this.log.finalise(this.sim);
 
@@ -518,23 +519,26 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             //try to run the simulation and print with the argument params
             try {
                 runSimulation(createSimulatorUsingArgs(args));
-                lblExceptionHeader.hide();
-                lblException.hide();
+                lblExceptionHeader.setVisible(false);
+                lblException.setVisible(false);
 
             } catch (AircraftException e1) {
                 e1.printStackTrace();
-                lblExceptionHeader.show();
-                lblException.show();
+                lblExceptionHeader.setVisible(true);
+                lblException.setText(e1.getMessage());
+                lblException.setVisible(true);
 
             } catch (PassengerException e1) {
                 e1.printStackTrace();
-                lblExceptionHeader.show();
-                lblException.show();
+                lblExceptionHeader.setVisible(true);
+                lblException.setText(e1.getMessage());
+                lblException.setVisible(true);
 
             } catch (SimulationException e1) {
                 e1.printStackTrace();
-                lblExceptionHeader.show();
-                lblException.show();
+                lblExceptionHeader.setVisible(true);
+                lblException.setText(e1.getMessage());
+                lblException.setVisible(true);
 
             } catch (IOException e1) {
                 e1.printStackTrace();
